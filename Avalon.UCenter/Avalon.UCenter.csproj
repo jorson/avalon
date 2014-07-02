@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{49466C35-9C3A-4FCF-86A0-EC9064A70800}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Avalon.UCenter</RootNamespace>
+    <AssemblyName>Avalon.UCenter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mappings\MappingApp.cs" />
+    <Compile Include="Models\LoginResultCode.cs" />
+    <Compile Include="Logins\BaseLogin.cs" />
+    <Compile Include="Logins\ThirdLogin.cs" />
+    <Compile Include="Logins\UserLogin.cs" />
+    <Compile Include="Logs\ActiveLog.cs" />
+    <Compile Include="Logs\ILogRepository.cs" />
+    <Compile Include="Logs\LastLoginLog.cs" />
+    <Compile Include="Logs\LoginLog.cs" />
+    <Compile Include="Logs\LogService.cs" />
+    <Compile Include="Logs\RegisterLog.cs" />
+    <Compile Include="Mappings\IMappingRepository.cs" />
+    <Compile Include="Mappings\Mapping.cs" />
+    <Compile Include="Mappings\MappingService.cs" />
+    <Compile Include="Mappings\MappingSource.cs" />
+    <Compile Include="Models\ModifyPasswordResultCode.cs" />
+    <Compile Include="Platforms\IPlatformRepository.cs" />
+    <Compile Include="Platforms\Platform.cs" />
+    <Compile Include="Platforms\PlatformService.cs" />
+    <Compile Include="Models\PlatType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\RegisterResultCode.cs" />
+    <Compile Include="ResultWrapper.cs" />
+    <Compile Include="ThirdParty\AccessTokenData.cs" />
+    <Compile Include="ThirdParty\OAuthClient.cs" />
+    <Compile Include="ThirdParty\OAuthClientSetting.cs" />
+    <Compile Include="ThirdParty\TencentOAuthClient.cs" />
+    <Compile Include="ThirdParty\ThirdPartyImpl.cs" />
+    <Compile Include="ThirdParty\WeiboOAuthClient.cs" />
+    <Compile Include="Models\UserStatus.cs" />
+    <Compile Include="UserCenterConfig.cs" />
+    <Compile Include="Models\UserRegister.cs" />
+    <Compile Include="UserService.cs" />
+    <Compile Include="Users\UserInner.cs" />
+    <Compile Include="Users\IUserInnerRepository.cs" />
+    <Compile Include="Users\UserInnerService.cs" />
+    <Compile Include="Users\UserValid.cs" />
+    <Compile Include="UserUtil.cs" />
+    <Compile Include="VerifyCodes\IVerifyCodeRepository.cs" />
+    <Compile Include="VerifyCodes\VerifyCode.cs" />
+    <Compile Include="VerifyCodes\VerifyCodeService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Avalon.Cache\Avalon.Cache.csproj">
+      <Project>{5c1bd726-ca74-4201-aedb-b1350ab9972c}</Project>
+      <Name>Avalon.Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Framework\Avalon.Framework.csproj">
+      <Project>{2d80cd45-97fe-41aa-b95e-250490e76dae}</Project>
+      <Name>Avalon.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.HttpClient\Avalon.HttpClient.csproj">
+      <Project>{d58262f4-c36d-4f22-86c0-fd7460980c27}</Project>
+      <Name>Avalon.HttpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.OAuth\Avalon.OAuth.csproj">
+      <Project>{146dbd8b-0114-43c8-856c-55c59a29e34a}</Project>
+      <Name>Avalon.OAuth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Profiler\Avalon.Profiler.csproj">
+      <Project>{615883dd-8819-41ad-a4ef-42757beeddd2}</Project>
+      <Name>Avalon.Profiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
+      <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
+      <Name>Avalon.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
+      <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
+      <Name>Avalon.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
