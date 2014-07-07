@@ -145,7 +145,10 @@ namespace Avalon.Resource
         /// <returns></returns>
         public static string WrapperUrl(string staticFileUrl)
         {
-            return string.Concat(ServerUrl, staticFileUrl, "?version=", Version);
+            var version = VersionManage.GetVersion(staticFileUrl);
+            return string.IsNullOrEmpty(version)
+                ? string.Concat(ServerUrl, staticFileUrl)
+                : string.Concat(ServerUrl, staticFileUrl, "?version=", version);
         }
     }
 }

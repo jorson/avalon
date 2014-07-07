@@ -60,81 +60,68 @@ namespace Avalon.Utility
 
         protected override void RemoveInner(Type type, string key)
         {
-            ValidParams(key);
-
             using (var client = CreateRedisClient())
             {
-                var keys = new List<string>(GetKeys(type, key));
-                keys.Add(key);
-                client.RemoveEntryFromHash(CacheName, keys.ToArray());
+                client.Remove(key);
             }
         }
 
         protected override IList<CacheItemResult> GetBatchResultInner(Type type, IEnumerable<string> keys)
         {
-            //产生 field keys
-            List<BatchItem> items = keys.Select(o =>
-            {
-                ValidParams(o);
-                return new BatchItem(o, GetKeys(type, o));
-            }).ToList();
-
-            //批量获取数据
-            string[] allValues = null;
-            using (var client = CreateRedisClient())
-            {
-                var allKeys = items.SelectMany(o => o.FieldKeys).ToArray();
-                allValues = client.GetValuesFromHash(CacheName, allKeys).ToArray();
-            }
+            var fieldKeys = ObjectHashMappingUtil.GetKeys(type);
 
             var clearKeys = new List<string>();
-            var outputs = items.For((o, i) =>
+            List<CacheItemResult> results = new List<CacheItemResult>();
+            using (var client = CreateRedisClient())
             {
-                var values = new string[o.FieldKeys.Length];
-                Array.Copy(allValues, i * o.FieldKeys.Length, values, 0, values.Length);
-
-                object value = null;
-
-                try
+                foreach (var key in keys)
                 {
-                    value = ObjectHashMappingUtil.ToObject(type, values);
+                    var kvs = client.GetAllEntriesFromHash(key);
+
+                    string[] values = new string[fieldKeys.Length];
+                    for (var i = 0; i < fieldKeys.Length; i++)
+                    {
+                        values[i] = kvs.TryGetValue(fieldKeys[i]);
+                    }
+                    object value = null;
+                    try
+                    {
+                        value = ObjectHashMappingUtil.ToObject(type, values);
+                    }
+                    catch (Exception ex)
+                    {
+                        clearKeys.Add(key);
+                        log.WarnFormat("反序列化数据 {0} 发生错误 {1}", String.Join("\r\n", values), ex.ToString());
+                    }
+                    results.Add(new CacheItemResult(key, value));
                 }
-                catch (Exception ex)
-                {
-                    clearKeys.AddRange(o.FieldKeys);
-                    log.WarnFormat("反序列化数据 {0} 发生错误 {1}", String.Join("\r\n", values), ex.ToString());
-                }
-                return new CacheItemResult(o.SourceKey, value);
-            });
 
-            //清除无效的数据
-            if (clearKeys.Count > 0)
-            {
-                using (var client = CreateRedisClient())
+                //清除无效的数据
+                if (clearKeys.Count > 0)
                 {
-                    client.RemoveEntryFromHash(CacheName, clearKeys.ToArray());
+                    client.RemoveAll(clearKeys);
                 }
             }
-            return outputs;
+            return results;
         }
 
         protected override void SetBatchInner(IEnumerable<CacheItem> items, DateTime expiredTime)
         {
             List<KeyValuePair<string, string>> datas = new List<KeyValuePair<string, string>>();
             var tick = NetworkTime.Now.Ticks.ToString();
-            foreach (var item in items)
-            {
-                var keyPrefix = GetKeyPrefix(item.Key);
-                var kvs = ObjectHashMappingUtil.ToHash(item.Value, keyPrefix);
-
-                // add timestamp for depend and manager
-                kvs.Add(item.Key, tick);
-                datas.AddRange(kvs);
-            }
-
             using (var client = CreateRedisClient())
             {
-                client.SetRangeInHash(CacheName, datas);
+                foreach (var item in items)
+                {
+                    var kvs = ObjectHashMappingUtil.ToHash(item.Value);
+
+                    // add timestamp for depend and manager
+                    kvs.Add(ObjectHashMappingUtil.TimeStampName, tick);
+                    var key = item.Key;
+                    client.SetRangeInHash(key, kvs);
+                    // 设置过期时间
+                    client.ExpireEntryAt(key, expiredTime);
+                }
             }
         }
 
@@ -143,56 +130,9 @@ namespace Avalon.Utility
             return base.ContainsByResult(type, key);
         }
 
-        object GetObject(Type type, string[] values)
-        {
-            if (values.All(o => String.IsNullOrEmpty(o)))
-                return null;
-            try
-            {
-                return ObjectHashMappingUtil.ToObject(type, values);
-            }
-            catch (Exception ex)
-            {
-
-                log.WarnFormat("反序列化数据 {0} 发生错误 {1}", String.Join("\r\n", values), ex.ToString());
-            }
-            return null;
-        }
-
-        string[] GetKeys(Type type, string key)
-        {
-            var keyPrefix = GetKeyPrefix(key);
-            return ObjectHashMappingUtil.GetKeys(type, keyPrefix);
-        }
-
-        void ValidParams(string key)
-        {
-            if (String.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key");
-        }
-
         IRedisClient CreateRedisClient()
         {
             return RedisManager.Instance.CreateRedisClient(ConnectionName);
-        }
-
-        string GetKeyPrefix(string key)
-        {
-            return key.Replace(CacheName + ":", "") + ":";
-        }
-
-
-        class BatchItem
-        {
-            public BatchItem(string sourceKey, string[] fieldKeys)
-            {
-                SourceKey = sourceKey;
-                FieldKeys = fieldKeys;
-            }
-
-            public string SourceKey { get; private set; }
-
-            public string[] FieldKeys { get; private set; }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Avalon.Resource
         static GlobalConfig()
         {
             _config = InitializeConfig();
+            VersionManage.StartGetAllVersion();
         }
 
         /// <summary>
@@ -52,13 +53,23 @@ namespace Avalon.Resource
         }
 
         /// <summary>
+        /// 基础平台服务器
+        /// </summary>
+        public static string CloudServer { get { return _config.CloudServer; } }
+
+        /// <summary>
+        /// 获取版本的间隔时间
+        /// </summary>
+        public static int VersionIntervalSeconds { get { return _config.VersionIntervalSeconds; } }
+
+        /// <summary>
         /// 读取配置
         /// </summary>
         private static NestedConfig InitializeConfig()
         {
-            var configs = ConfigurationManager.GetSection("avalon.resource") as NameValueCollection;
+            var configs = ConfigurationManager.GetSection("nd.resource") as NameValueCollection;
             if (configs == null)
-                throw new Exception("缺少avalon.resource配置节");
+                throw new Exception("缺少nd.resource配置节");
 
             var config = new NestedConfig();
             //Debug
@@ -86,6 +97,17 @@ namespace Avalon.Resource
 
                 config.ServerList.Add(server);
             }
+            //CloudServer
+            config.CloudServer = configs["CloudServer"];
+            if (string.IsNullOrEmpty(config.CloudServer))
+                throw new Exception("配置节CloudServer不能为空");
+            //VersionIntervalSeconds
+            if (!string.IsNullOrEmpty(configs["VersionIntervalSeconds"]))
+            {
+                var versionIntervalSeconds = Convert.ToInt32(configs["VersionIntervalSeconds"]);
+                if (versionIntervalSeconds > 0)
+                    config.VersionIntervalSeconds = versionIntervalSeconds;
+            }
             return config;
         }
 
@@ -94,13 +116,14 @@ namespace Avalon.Resource
             public NestedConfig()
             {
                 ServerList = new List<string>();
+                VersionIntervalSeconds = 300;
             }
 
             public string Version { get; set; }
-
             public bool Debug { get; set; }
-
             public List<string> ServerList { get; set; }
+            public string CloudServer { get; set; }
+            public int VersionIntervalSeconds { get; set; }
         }
     }
 }

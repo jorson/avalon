@@ -67,10 +67,16 @@
     <Compile Include="Api\ApiAttribute.cs" />
     <Compile Include="Api\ApiControllerActionInvoker.cs" />
     <Compile Include="Api\ApiControllerFactory.cs" />
+    <Compile Include="Api\Docs\DocumentIgnoreAttribute.cs" />
+    <Compile Include="Api\Docs\ResponseCodeAttribute.cs" />
+    <Compile Include="Api\Docs\RoutePathAttribute.cs" />
     <Compile Include="Api\MutilApiImpl.cs" />
+    <Compile Include="Api\NoTrimAttribute.cs" />
     <Compile Include="Api\ODataQueryAttribute.cs" />
     <Compile Include="Api\OpenApiAttribute.cs" />
+    <Compile Include="Api\OpenApiMethodAttribute.cs" />
     <Compile Include="Api\PlatformAuthorizeAttribute.cs" />
+    <Compile Include="Api\TrimModelBinder.cs" />
     <Compile Include="ControllerExtensions\InvokeActionResultExtend.cs" />
     <Compile Include="FilterExtensions\CompressAttribute.cs" />
     <Compile Include="FilterExtensions\CustomActionNameAttribute.cs" />
@@ -89,6 +95,8 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollector.cs" />
     <Compile Include="Resources\ResourceType.cs" />
+    <Compile Include="Resources\VersionConfig.cs" />
+    <Compile Include="Resources\VersionManage.cs" />
     <Compile Include="RoutesExtensions\AreaRegistrationContextExtension.cs" />
     <Compile Include="RoutesExtensions\CustomRoute.cs" />
     <Compile Include="RoutesExtensions\DomainRoutes\DomainData.cs" />

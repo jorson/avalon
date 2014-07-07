@@ -24,6 +24,11 @@ namespace Avalon.WebUtility
             Data = new OpenApiData() { Code = code, Message = GetExceptionMessage(exception), Data = data };
         }
 
+        public OpenApiDataResult(string message, int code, object data = null)
+        {
+            Data = new OpenApiData() { Code = code, Message = message, Data = data };
+        }
+
         /// <summary>
         /// 数据
         /// </summary>
@@ -31,6 +36,16 @@ namespace Avalon.WebUtility
         {
             get;
             set;
+        }
+
+        public static OpenApiDataResult Create<TEnum>(TEnum enumValue, object data = null) where TEnum : struct,IConvertible
+        {
+            return new OpenApiDataResult(DescriptionExtend.GetDescription<TEnum>(enumValue), enumValue.ToInt32(null), data);
+        }
+
+        public static OpenApiDataResult Create<TEnum>(string message, TEnum enumValue, object data = null) where TEnum : struct,IConvertible
+        {
+            return new OpenApiDataResult(message, enumValue.ToInt32(null), data);
         }
 
         public override void ExecuteResult(ControllerContext context)

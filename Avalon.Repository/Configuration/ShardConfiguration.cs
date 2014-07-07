@@ -9,6 +9,7 @@ namespace Avalon.Framework.Configurations
 {
     internal class ShardConfiguration
     {
+        object syncObj = new object();
         ToolSection section;
         IShardSessionFactory defaultSessionFactory;
         Type defaultStrategyType;
@@ -52,9 +53,10 @@ namespace Avalon.Framework.Configurations
 
                 foreach (var item in shardNode.TryGetNodes("entities/entity"))
                 {
-                    var entityType = Type.GetType(item.TryGetValue("type"));
+                    var type = item.TryGetValue("type");
+                    var entityType = Type.GetType(type);
                     if (entityType == null)
-                        throw new ArgumentNullException("entityType");
+                        throw new ArgumentNullException("entityType", "未能加载类型 " + type);
 
                     //注册分区策略
                     var stategyString = item.TryGetValue("strategy");
@@ -126,10 +128,10 @@ namespace Avalon.Framework.Configurations
             if (strategy is AbstractShardStrategy && attributes != null)
                 ((AbstractShardStrategy)strategy).Init(attributes);
 
-            if (stategies.ContainsKey(entityType))
+            lock(syncObj)
+            {
                 stategies[entityType] = strategy;
-            else
-                stategies.Add(entityType, strategy);
+            }
             return strategy;
         }
 
@@ -161,7 +163,13 @@ namespace Avalon.Framework.Configurations
 
             var factory = CreateShardSessionFactory(shardSessionFactoryType);
             if (factory != null)
-                sessionFactories.Add(entityType, factory);
+            {
+                lock (syncObj)
+                {
+                    sessionFactories.Add(entityType, factory);
+                }
+            }
+                
         }
 
         public IShardSessionFactory GetSessionFactory(Type entityType, bool valid)
@@ -208,11 +216,18 @@ namespace Avalon.Framework.Configurations
             var factory = factoryInstances.TryGetValue(factoryType);
             if (factory == null)
             {
-                factory = (IShardSessionFactory)FastActivator.Create(factoryType);
-                if (factory == null)
-                    throw new ArgumentNullException("factory");
+                lock (syncObj)
+                {
+                    factory = factoryInstances.TryGetValue(factoryType);
+                    if (factory == null)
+                    {
+                        factory = (IShardSessionFactory)FastActivator.Create(factoryType);
+                        if (factory == null)
+                            throw new ArgumentNullException("factory");
 
-                factoryInstances.Add(factoryType, factory);
+                        factoryInstances.Add(factoryType, factory);
+                    }
+                }
             }
             return factory;
         }

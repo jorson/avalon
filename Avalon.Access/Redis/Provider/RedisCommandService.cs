@@ -42,8 +42,10 @@ edel type id    Del entity by id
             RegisterCommand("eget", ProcessCommandEGet);
             RegisterCommand("edel", ProcessCommandEDel);
             RegisterCommand("get", (value, app) => Exec((client) => client.GetValue(value), app));
-            RegisterCommand("dbsize", (value, app) => Exec((client) => client.DbSize.ToString(), app));
             RegisterCommand("keys", (value, app) => Exec((client) => ListToString(client.SearchKeys(value)), app));
+            RegisterCommand("del", ProcessCommandForDel);
+            RegisterCommand("dbsize", (value, app) => Exec((client) => client.DbSize.ToString(), app));
+
             RegisterCommand("hkeys", (value, app) => Exec((client) => ListToString(client.GetHashKeys(value)), app));
             RegisterCommand("hlen", (value, app) => Exec((client) => client.GetHashCount(value).ToString(), app));
             RegisterCommand("hgetall", (value, app) => Exec((client) => DictionaryToString(client.GetAllEntriesFromHash(value)), app));
@@ -121,6 +123,23 @@ edel type id    Del entity by id
                 }
             }
             return false;
+        }
+
+        void ProcessCommandForDel(string value, HttpApplication app)
+        {
+            using (var client = CreateRedisClient())
+            {
+                try
+                {
+                    var keys = client.SearchKeys(value);
+                    client.RemoveAll(keys);
+                    WriteContent(keys.Count, app);
+                }
+                catch (Exception ex)
+                {
+                    WriteContent(ex.Message, app);
+                }
+            }
         }
 
         void Exec(Func<IRedisClient, string> action, HttpApplication app)

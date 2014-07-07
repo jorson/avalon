@@ -15,64 +15,38 @@ namespace Avalon.Utility
         static Dictionary<Type, TypeAccessor> accessors = new Dictionary<Type, TypeAccessor>();
 
         Type type;
-        Dictionary<string, Func<object, object>> propertyGetterDic;
-        Dictionary<string, Action<object, object>> propertySetterDic;
+        PropertyInfo[] properties;
+        FieldInfo[] fields;
+
+        Dictionary<string, MemberAccess<PropertyInfo>> propertyAccessDic;
+        Dictionary<string, MemberAccess<FieldInfo>> fieldAccessDic;
 
         IList<PropertyInfo> readWriteProperties;
-        IList<Action<object, object>> readWriterPropertyCloners;
-        IList<Func<object, object>> readWritePropertyGetters;
-        IList<Action<object, object>> readWritePropertySetters;
-
-        Dictionary<string, Func<object, object>> fieldGetterDic;
-        Dictionary<string, Action<object, object>> fieldSetterDic;
-
-        Dictionary<string, Action<object, object>> clonePropertyDic;
-        Dictionary<string, Action<object, object>> cloneFieldDic;
-        IList<Action<object, object>> fieldCloners;
-        Action<object, object, Func<object, object>> cloneFields;
+        Action<object, object, Func<object, object>> cloneFieldsHandler;
 
         private TypeAccessor(Type type)
         {
             this.type = type;
-
-            propertyGetterDic = new Dictionary<string, Func<object, object>>();
-            propertySetterDic = new Dictionary<string, Action<object, object>>();
-
-            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(o => o.GetIndexParameters().Length == 0).ToList();
-            propertyGetterDic = properties.Where(o => o.CanRead).ToDictionary(o => o.Name, o => DelegateAccessor.CreatePropertyGetter(o));
-            propertySetterDic = properties.Where(o => o.CanWrite).ToDictionary(o => o.Name, o => DelegateAccessor.CreatePropertySetter(o));
-
+            properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(o => o.GetIndexParameters().Length == 0).ToArray();
             readWriteProperties = properties.Where(o => o.CanRead && o.CanWrite).ToList();
-            readWritePropertyGetters = readWriteProperties.Select(o => propertyGetterDic[o.Name]).ToList();
-            readWritePropertySetters = readWriteProperties.Select(o => propertySetterDic[o.Name]).ToList();
+            fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToArray();
 
-            clonePropertyDic = readWriteProperties.ToDictionary(o => o.Name, o => DelegateAccessor.CreatePropertyCloner(o));
+            propertyAccessDic = properties.ToDictionary(o => o.Name, o => CreateMemberAccess(o));
+            fieldAccessDic = fields.ToDictionary(o => o.Name, o => CreateMemberAccess(o));
 
-            readWriterPropertyCloners = readWriteProperties.Select(o => clonePropertyDic[o.Name]).ToList();
-
-            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-            fieldGetterDic = fields.ToDictionary(o => o.Name, o => DelegateAccessor.CreateFieldGetter(o));
-            fieldSetterDic = fields.ToDictionary(o => o.Name, o => DelegateAccessor.CreateFieldSetter(o));
-
-            cloneFieldDic = fields.Where(o => !o.IsInitOnly).ToDictionary(o => o.Name, o => DelegateAccessor.CreateFieldCloner(o));
-            fieldCloners = fields.Where(o => !o.IsInitOnly).Select(o => cloneFieldDic[o.Name]).ToList();
-
-            var cloneGetters = fields.Select(o => fieldGetterDic[o.Name]).ToArray();
-            var cloneSetters = fields.Select(o => fieldSetterDic[o.Name]).ToArray();
-
-            cloneFields = (source, target, fieldHandler) =>
+            cloneFieldsHandler = (source, target, valueProcessHandler) =>
             {
-                for (var i = 0; i < cloneGetters.Length; i++)
+                foreach (var entry in fieldAccessDic)
                 {
-                    var v = fieldHandler(cloneGetters[i](source));
-                    cloneSetters[i](target, v);
+                    var v = valueProcessHandler(entry.Value.Getter(source));
+                    entry.Value.Setter(target, v);
                 }
             };
         }
 
-        public void CloneByFields(object source, object target, Func<object, object> fieldValueHandler)
+        public void CloneByFields(object source, object target, Func<object, object> valueProcessHandler)
         {
-            cloneFields(source, target, fieldValueHandler);
+            cloneFieldsHandler(source, target, valueProcessHandler);
         }
 
         public static TypeAccessor GetAccessor(Type type)
@@ -97,6 +71,26 @@ namespace Avalon.Utility
             get { return type; }
         }
 
+        public PropertyInfo[] Properties
+        {
+            get { return properties; }
+        }
+
+        public FieldInfo[] Fields
+        {
+            get { return fields; }
+        }
+
+        public Dictionary<string, MemberAccess<PropertyInfo>> PropertyAccessDic
+        {
+            get { return propertyAccessDic; }
+        }
+
+        public Dictionary<string, MemberAccess<FieldInfo>> FieldAccessDic
+        {
+            get { return fieldAccessDic; }
+        }
+
         public object Create()
         {
             return FastActivator.Create(type);
@@ -104,32 +98,32 @@ namespace Avalon.Utility
 
         public Action<object, object> GetPropertyClone(string propertyName)
         {
-            return clonePropertyDic.TryGetValue(propertyName);
+            return propertyAccessDic.TryGetValue(propertyName).GetOrDefault(o => o.Cloner);
         }
 
         public Action<object, object> GetFieldClone(string fieldName)
         {
-            return cloneFieldDic.TryGetValue(fieldName);
+            return fieldAccessDic.TryGetValue(fieldName).GetOrDefault(o => o.Cloner);
         }
 
         public Func<object, object> GetPropertyGetter(string propertyName)
         {
-            return propertyGetterDic.TryGetValue(propertyName);
+            return propertyAccessDic.TryGetValue(propertyName).GetOrDefault(o => o.Getter);
         }
 
         public Action<object, object> GetPropertySetter(string propertyName)
         {
-            return propertySetterDic.TryGetValue(propertyName);
+            return propertyAccessDic.TryGetValue(propertyName).GetOrDefault(o => o.Setter);
         }
 
-        public Func<object, object> GetFieldGetter(string propertyName)
+        public Func<object, object> GetFieldGetter(string fieldName)
         {
-            return fieldGetterDic.TryGetValue(propertyName);
+            return fieldAccessDic.TryGetValue(fieldName).GetOrDefault(o => o.Getter);
         }
 
-        public Action<object, object> GetFieldSetter(string propertyName)
+        public Action<object, object> GetFieldSetter(string fieldName)
         {
-            return fieldSetterDic.TryGetValue(propertyName);
+            return fieldAccessDic.TryGetValue(fieldName).GetOrDefault(o => o.Setter);
         }
 
         public object GetProperty(string propertyName, object instance)
@@ -137,12 +131,11 @@ namespace Avalon.Utility
             if (instance == null)
                 throw new ArgumentNullException("instance");
 
-            Func<object, object> getter;
-            if (propertyGetterDic.TryGetValue(propertyName, out getter))
-            {
-                return getter(instance);
-            }
-            throw new ArgumentOutOfRangeException("propertyName", String.Format("对象 {0} 没有命名为 {1} 的属性", instance.GetType().FullName, propertyName));
+            Func<object, object> getter = GetPropertyGetter(propertyName);
+            if (getter == null)
+                throw new ArgumentOutOfRangeException("propertyName", String.Format("对象 {0} 没有命名为 {1} 的属性", instance.GetType().FullName, propertyName));
+
+            return getter(instance);
         }
 
         public void SetProperty(string propertyName, object instance, object value)
@@ -150,13 +143,11 @@ namespace Avalon.Utility
             if (instance == null)
                 throw new ArgumentNullException("instance");
 
-            Action<object, object> setter;
-            if (propertySetterDic.TryGetValue(propertyName, out setter))
-            {
-                setter(instance, value);
-                return;
-            }
-            throw new ArgumentOutOfRangeException("propertyName", String.Format("对象 {0} 没有命名为 {1} 的属性", instance.GetType().FullName, propertyName));
+            Action<object, object> setter = GetPropertySetter(propertyName);
+            if (setter == null)
+                throw new ArgumentOutOfRangeException("propertyName", String.Format("对象 {0} 没有命名为 {1} 的属性", instance.GetType().FullName, propertyName));
+
+            setter(instance, value);
         }
 
         public object GetField(string fieldName, object instance)
@@ -164,12 +155,11 @@ namespace Avalon.Utility
             if (instance == null)
                 throw new ArgumentNullException("instance");
 
-            Func<object, object> getter;
-            if (fieldGetterDic.TryGetValue(fieldName, out getter))
-            {
-                return getter(instance);
-            }
-            throw new ArgumentOutOfRangeException("fieldName", String.Format("对象 {0} 没有命名为 {1} 的字段", instance.GetType().FullName, fieldName));
+            Func<object, object> getter = GetFieldGetter(fieldName);
+            if (getter == null)
+                throw new ArgumentOutOfRangeException("fieldName", String.Format("对象 {0} 没有命名为 {1} 的字段", instance.GetType().FullName, fieldName));
+
+            return getter(instance);
         }
 
         public void SetField(string fieldName, object instance, object value)
@@ -177,13 +167,11 @@ namespace Avalon.Utility
             if (instance == null)
                 throw new ArgumentNullException("instance");
 
-            Action<object, object> setter;
-            if (fieldSetterDic.TryGetValue(fieldName, out setter))
-            {
-                setter(instance, value);
-                return;
-            }
-            throw new ArgumentOutOfRangeException("fieldName", String.Format("对象 {0} 没有命名为 {1} 的字段", instance.GetType().FullName, fieldName));
+            Action<object, object> setter = GetFieldSetter(fieldName);
+            if (setter == null)
+                throw new ArgumentOutOfRangeException("fieldName", String.Format("对象 {0} 没有命名为 {1} 的字段", instance.GetType().FullName, fieldName));
+
+            setter(instance, value);
         }
 
         public IList<PropertyInfo> ReadWriteProperties
@@ -193,22 +181,72 @@ namespace Avalon.Utility
 
         public object[] GetReadWritePropertyValues(object entity)
         {
-            return readWritePropertyGetters.Select(o => o(entity)).ToArray();
+            return propertyAccessDic.Values.Where(o => o.CanClone).Select(o => o.Getter(entity)).ToArray();
         }
 
         public void SetReadWritePropertyValues(object entity, object[] values)
         {
             if (values.Length != readWriteProperties.Count)
                 throw new ArgumentException(String.Format("给定的值个数 {0} 与属性的个数 {1} 不一致，对象类型为 {2}。", values.Length, readWriteProperties.Count, type.FullName));
+
+            var setters = propertyAccessDic.Values.Where(o => o.CanClone).ToArray();
             for (var i = 0; i < values.Length; i++)
-                readWritePropertySetters[i](entity, values[i]);
+                setters[i].Setter(entity, values[i]);
         }
 
-        public IDictionary<string, object> GetFieldValueDictionary(object instance)
+        static MemberAccess<PropertyInfo> CreateMemberAccess(PropertyInfo member)
         {
-            if (instance == null)
-                throw new ArgumentNullException("instance");
-            return fieldGetterDic.ToDictionary(o => o.Key, o => o.Value(instance));
+            var memberAccess = new MemberAccess<PropertyInfo>()
+            {
+                Member = member,
+                CanRead = member.CanRead,
+                CanWrite = member.CanWrite
+            };
+            if (memberAccess.CanRead)
+                memberAccess.Getter = DelegateAccessor.CreatePropertyGetter(member);
+            if (memberAccess.CanWrite)
+                memberAccess.Setter = DelegateAccessor.CreatePropertySetter(member);
+            if (memberAccess.CanClone)
+                memberAccess.Cloner = DelegateAccessor.CreatePropertyCloner(member);
+
+            return memberAccess;
+        }
+
+        static MemberAccess<FieldInfo> CreateMemberAccess(FieldInfo member)
+        {
+            var memberAccess = new MemberAccess<FieldInfo>()
+            {
+                Member = member,
+                CanRead = true,
+                CanWrite = true
+            };
+            if (memberAccess.CanRead)
+                memberAccess.Getter = DelegateAccessor.CreateFieldGetter(member);
+            if (memberAccess.CanWrite)
+                memberAccess.Setter = DelegateAccessor.CreateFieldSetter(member);
+            if (memberAccess.CanClone)
+                memberAccess.Cloner = DelegateAccessor.CreateFieldCloner(member);
+
+            return memberAccess;
+        }
+
+        public class MemberAccess<T> where T : MemberInfo
+        {
+            public T Member { get; internal set; }
+
+            public bool CanRead { get; internal set; }
+            public bool CanWrite { get; internal set; }
+
+            public bool CanClone
+            {
+                get { return CanRead && CanWrite; }
+            }
+
+            public Func<object, object> Getter { get; internal set; }
+
+            public Action<object, object> Setter { get; internal set; }
+
+            public Action<object, object> Cloner { get; internal set; }
         }
     }
 }

@@ -5,15 +5,26 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Avalon.RedisProvider
 {
     internal static class ObjectHashMappingUtil
     {
+        static Type tupleType;
         const string NullValue = "$<NULL>$";
         const string ValueName = "$<VALUE>$";
-
+        public const string TimeStampName = "$<TIMESTAMP>$";
+        static ObjectHashMappingUtil()
+        {
+            tupleType = Type.GetType("System.ITuple");
+        }
+        static bool IsSingleValue(Type type)
+        {
+            //基元类型或集合
+            return Type.GetTypeCode(type) != TypeCode.Object || typeof(IEnumerable).IsAssignableFrom(type);
+        }
         public static Dictionary<string, string> ToHash(object instance, string keyPrefix = "")
         {
             if (instance == null)
@@ -28,13 +39,23 @@ namespace Avalon.RedisProvider
             }
             else
             {
-                TypeAccessor ta = TypeAccessor.GetAccessor(instance.GetType());
-                if (ta.ReadWriteProperties.Count == 0)
+                //集合整个进行序列化
+                if (IsSingleValue(type))
                 {
                     dic.Add(keyPrefix + ValueName, ToString(instance, type));
                 }
+                // for tuple
+                else if (tupleType.IsAssignableFrom(type))
+                {
+                    TypeAccessor ta = TypeAccessor.GetAccessor(type);
+                    dic = ta.FieldAccessDic.ToDictionary(o => o.Key, o => ToString(o.Value.Getter(instance), o.Value.Member.FieldType));
+                }
                 else
                 {
+                    TypeAccessor ta = TypeAccessor.GetAccessor(type);
+                    if (ta.ReadWriteProperties.Count == 0)
+                        throw new NotSupportedException(String.Format("给定的对象 {0} 没有任何可读写的属性，无法进行序列化", type.FullName));
+
                     var values = ta.GetReadWritePropertyValues(instance);
                     int index = 0;
                     foreach (var property in ta.ReadWriteProperties)
@@ -47,12 +68,23 @@ namespace Avalon.RedisProvider
             return dic;
         }
 
-        public static string[] GetKeys(Type type, string keyPrefix)
+        public static string[] GetKeys(Type type, string keyPrefix = "")
         {
-            TypeAccessor ta = TypeAccessor.GetAccessor(type);
             List<string> keys = new List<string>();
-            keys.Add(keyPrefix + ValueName);
-            keys.AddRange(ta.ReadWriteProperties.Select(o => keyPrefix + o.Name));
+            if (IsSingleValue(type))
+            {
+                keys.Add(keyPrefix + ValueName);
+            }
+            // for tuple
+            else if (tupleType.IsAssignableFrom(type))
+            {
+                keys.AddRange(type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic).Select(o => o.Name));
+            }
+            else
+            {
+                TypeAccessor ta = TypeAccessor.GetAccessor(type);
+                keys.AddRange(ta.ReadWriteProperties.Select(o => keyPrefix + o.Name));
+            }
             return keys.ToArray();
         }
 
@@ -73,16 +105,31 @@ namespace Avalon.RedisProvider
             if (stringValues[0] == NullValue)
                 return EmptyData.Value;
 
-            if (stringValues.Length == 1)
+            if (IsSingleValue(type))
                 return FromString(stringValues[0], type);
 
             TypeAccessor ta = TypeAccessor.GetAccessor(type);
+            if (tupleType.IsAssignableFrom(type))
+            {
+                var tuple = FormatterServices.GetUninitializedObject(type);
+                int i = 0;
+                foreach (var entry in ta.FieldAccessDic)
+                {
+                    var v = FromString(stringValues[i], entry.Value.Member.FieldType);
+                    entry.Value.Setter(tuple, v);
+                    i++;
+                }
+                return tuple;
+            }
 
-            object[] values = new object[stringValues.Length - 1];
+            if (ta.ReadWriteProperties.Count == 0)
+                throw new NotSupportedException(String.Format("给定的对象 {0} 没有任何可读写的属性，无法进行序列化", type.FullName));
+
+            object[] values = new object[ta.ReadWriteProperties.Count];
             int index = 0;
             foreach (var property in ta.ReadWriteProperties)
             {
-                values[index] = FromString(stringValues[index + 1], property.PropertyType);
+                values[index] = FromString(stringValues[index], property.PropertyType);
                 index++;
             }
 

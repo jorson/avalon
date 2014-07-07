@@ -20,13 +20,35 @@ namespace Avalon.WebUtility
 
             if (filterContext.Exception is AvalonException)
                 code = ((AvalonException)filterContext.Exception).Code;
+
+            if (filterContext.Exception is BusinessException)
+                code = ((BusinessException)filterContext.Exception).Code;
             return code;
         }
 
         public virtual void OnException(ExceptionContext filterContext)
         {
-            if (log.IsErrorEnabled)
-                log.Error(filterContext.Exception.Message, filterContext.Exception);
+            var svrIp = filterContext.HttpContext.Request.ServerVariables["Local_Addr"];
+            var clientIp = IpAddress.GetIP();
+            var ipInfoStr = string.Format(@"
+服务器ip：{0}
+客户端ip：{1}", svrIp, clientIp);
+            var msg = filterContext.Exception.Message + ipInfoStr;
+
+            if (filterContext.Exception is BusinessException)
+            {
+                if (log.IsInfoEnabled)
+                {
+                    log.Info(msg, filterContext.Exception);
+                }
+            }
+            else
+            {
+                if (log.IsErrorEnabled)
+                {
+                    log.Error(msg, filterContext.Exception);
+                }
+            }
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Web.Mvc;
 
 namespace Avalon.WebUtility
 {
+    /// <summary>
+    /// 使得接口支持 $metadata 参数
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class ODataQueryAttribute : ActionFilterAttribute
     {

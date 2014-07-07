@@ -26,6 +26,27 @@ namespace Avalon.MongoAccess
             }
         }
 
+        public MongoCollection GetCollection(Type entityType, ShardParams shardParams)
+        {
+            var strategy = RepositoryFramework.GetShardStrategy(entityType);
+            if (strategy == null)
+                throw new ArgumentNullException("strategy", String.Format("无法找到类型 {0} 对应的分区策略信息。", entityType.FullName));
+
+            var shardId = strategy.GetShardId(shardParams);
+            var partitionId = strategy.GetPartitionId(shardParams);
+
+            var database = GetConnection(shardId);
+            if (partitionId == null)
+            {
+                var metadata = RepositoryFramework.GetDefineMetadata(entityType);
+                if (metadata != null && !String.IsNullOrEmpty(metadata.Table))
+                    return database.GetCollection(entityType, metadata.Table);
+
+                return database.GetCollection(entityType, entityType.Name);
+            }
+            return database.GetCollection(entityType, partitionId.RealTableName);
+        }
+
         public MongoCollection<TEntity> GetCollection<TEntity>(ShardParams shardParams)
         {
             var strategy = RepositoryFramework.GetShardStrategy(typeof(TEntity));
@@ -49,11 +70,21 @@ namespace Avalon.MongoAccess
 
         protected override MongoDatabase CreateConnection(string connStr)
         {
-            var mongoUrl = MongoUrl.Create(connStr);
-            using (ProfilerContext.Watch("open mongo database"))
+            try
             {
-                MongoClient client = new MongoClient(mongoUrl);
-                return client.GetServer().GetDatabase(mongoUrl.DatabaseName);
+                var mongoUrl = MongoUrl.Create(connStr);
+                using (ProfilerContext.Watch("open mongo database"))
+                {
+                    MongoClient client = new MongoClient(mongoUrl);
+                    return client.GetServer().GetDatabase(mongoUrl.DatabaseName);
+                }
+            }
+            catch (FormatException ex)
+            {
+                // 防止 mongodbdrvier 将连接串信息提交出去。
+                if (ex.Message.Contains("connection string"))
+                    throw new FormatException("Invalid connection string");
+                throw;
             }
         }
     }

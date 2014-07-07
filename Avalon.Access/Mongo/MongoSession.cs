@@ -29,6 +29,11 @@ namespace Avalon.MongoAccess
             return manager.GetCollection<T>(shardParams);
         }
 
+        public MongoCollection GetCollection(Type entityType, ShardParams shardParams)
+        {
+            return manager.GetCollection(entityType, shardParams);
+        }
+
         public IQueryable<T> CreateQuery<T>(ShardParams shardParams)
         {
             return new MonogQueryable<T>(new MongoQueryExecutor(this, shardParams));
@@ -124,7 +129,7 @@ namespace Avalon.MongoAccess
         {
             var message = String.Format("{0}@{1}\r\nquery:{2}", typeof(T).FullName, method, query);
             if (ProfilerContext.Current.Enabled)
-                ProfilerContext.Current.Trace("mongo", String.Format("{0}@{1}\r\nquery:{2}", typeof(T).FullName, method, ProfilerUtil.JsonFormat(query)));
+                ProfilerContext.Current.Trace("mongo", String.Format("{0}@{1}\r\nquery:{2}", typeof(T).FullName, method, Profiler.ProfilerUtil.JsonFormat(query)));
         }
 
         public void AddToSet<TEntity, TSet>(ShardParams shardParams, TEntity entity, Expression<Func<TEntity, object>> expr, IEnumerable<TSet> setIds)
