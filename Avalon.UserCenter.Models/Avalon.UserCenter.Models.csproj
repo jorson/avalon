@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2307C827-3032-4ADE-A943-9A7FD4CC0A8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Avalon.UserCenter.Models</RootNamespace>
+    <AssemblyName>Avalon.UserCenter.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultWrapper.cs" />
+    <Compile Include="Users\AccountInfo.cs" />
+    <Compile Include="Users\AccountResult.cs" />
+    <Compile Include="Users\AreaInfo.cs" />
+    <Compile Include="Users\ExamineMessage.cs" />
+    <Compile Include="Users\ForgetMode.cs" />
+    <Compile Include="Users\IDCardRetrieveAuditStatus.cs" />
+    <Compile Include="Users\IDCardRetrieveFilter.cs" />
+    <Compile Include="Users\ImageType.cs" />
+    <Compile Include="Users\ImageUploadResult.cs" />
+    <Compile Include="Users\ImportAccount.cs" />
+    <Compile Include="Users\ImportUser.cs" />
+    <Compile Include="Users\LoginInfo.cs" />
+    <Compile Include="Users\LoginOrRegisterResult.cs" />
+    <Compile Include="Users\ManulRetrieveFilter.cs" />
+    <Compile Include="Users\ManulRetrieveOtherInfo.cs" />
+    <Compile Include="Users\RecoverTokenResult.cs" />
+    <Compile Include="Users\RegisterMode.cs" />
+    <Compile Include="Users\SmsType.cs" />
+    <Compile Include="Users\SolutionFilter.cs" />
+    <Compile Include="Users\SolutionRegexString.cs" />
+    <Compile Include="Users\SolutionType.cs" />
+    <Compile Include="Users\Template.cs" />
+    <Compile Include="Users\UserAccountFilter.cs" />
+    <Compile Include="Users\UserCode.cs" />
+    <Compile Include="Users\UserLoginLogFilter.cs" />
+    <Compile Include="Users\UserRegexString.cs" />
+    <Compile Include="Users\UserRegister.cs" />
+    <Compile Include="Users\UserResults.cs" />
+    <Compile Include="Users\UserStatus.cs" />
+    <Compile Include="Users\VerifyCodeResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
+      <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
+      <Name>Avalon.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
+      <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
+      <Name>Avalon.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{682AFA21-4191-48A5-B2B4-434A30D9749D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Avalon.CloudClient</RootNamespace>
+    <AssemblyName>Avalon.CloudClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientContext.cs" />
+    <Compile Include="Clouds\Store\StoreObject.cs" />
+    <Compile Include="Clouds\Store\StoreObjectRepository.cs" />
+    <Compile Include="Clouds\Store\StoreObjectService.cs" />
+    <Compile Include="Clouds\Task\Job.cs" />
+    <Compile Include="Clouds\Task\JobRepository.cs" />
+    <Compile Include="Clouds\Task\JobService.cs" />
+    <Compile Include="EntityUtil.cs" />
+    <Compile Include="Querys\HttpQuerySpecification.cs" />
+    <Compile Include="Querys\HttpQuerySpecificationProvider.cs" />
+    <Compile Include="Querys\LinqToODataStringVisitor.cs" />
+    <Compile Include="Querys\ODataStringBuilder.cs" />
+    <Compile Include="Repository\AbstractHttpRepository.cs" />
+    <Compile Include="Repository\IHttpRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Version.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Avalon.Framework\Avalon.Framework.csproj">
+      <Project>{2d80cd45-97fe-41aa-b95e-250490e76dae}</Project>
+      <Name>Avalon.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.HttpClient\Avalon.HttpClient.csproj">
+      <Project>{d58262f4-c36d-4f22-86c0-fd7460980c27}</Project>
+      <Name>Avalon.HttpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.OAuthClient\Avalon.OAuthClient.csproj">
+      <Project>{c734b26a-1439-4446-973e-6c17142d9646}</Project>
+      <Name>Avalon.OAuthClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
+      <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
+      <Name>Avalon.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
+      <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
+      <Name>Avalon.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -59,5 +59,35 @@ namespace Avalon.Utility
         {
             return (int)date.ToUnixTime() == 0;
         }
+
+        /// <summary>
+        /// 获取日期的年月日
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>yyyy-MM-dd</returns>
+        public static string GetYTD(this DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd");
+        }
+
+        /// <summary>
+        /// 获取日期的年月日时分
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>yyyy-MM-dd HH:mm</returns>
+        public static string GetYTDHM(this DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd HH:mm");
+        }
+
+        /// <summary>
+        /// 获取日期的年月日时分秒
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>yyyy-MM-dd HH:mm:ss</returns>
+        public static string GetYTDHMS(this DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd HH:mm:ss");
+        }
     }
 }

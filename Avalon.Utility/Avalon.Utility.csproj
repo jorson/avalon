@@ -35,6 +35,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -54,6 +58,24 @@
   <ItemGroup>
     <Compile Include="Exception\BusinessException.cs" />
     <Compile Include="Extend\DescriptionExtend.cs" />
+    <Compile Include="Extend\ListExtend.cs" />
+    <Compile Include="Security\Annotations\CanBeNullAttribute.cs" />
+    <Compile Include="Security\Annotations\NotNullAttribute.cs" />
+    <Compile Include="Security\App_Config\ConfigurationManager.cs" />
+    <Compile Include="Security\App_Config\ConfigurationSectionDesigner.csd.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </Compile>
+    <Compile Include="Security\Crc32.cs" />
+    <Compile Include="Security\CryptographyManager.cs" />
+    <Compile Include="Security\Extensions\Crc32Extensions.cs" />
+    <Compile Include="Security\Extensions\CryptographyExtensions.cs" />
+    <Compile Include="Security\Extensions\HttpRequestBaseExtend.cs" />
+    <Compile Include="Security\Extensions\JsonExtensions.cs" />
+    <Compile Include="Security\Extensions\StringExtensions.Base64AndBytes.cs" />
+    <Compile Include="Security\JsonCookie\JsonCookie.cs" />
+    <Compile Include="Security\JsonCookie\JsonCookieEncryptionType.cs" />
     <Compile Include="Util\AbstractServerDetector.cs" />
     <Compile Include="Configuration\ConfigurationException.cs" />
     <Compile Include="Configuration\InnerManager.cs" />
@@ -97,6 +119,7 @@
     <Compile Include="Settings\SettingProvider.cs" />
     <Compile Include="ShardParams.cs" />
     <Compile Include="Util\AcquireLock.cs" />
+    <Compile Include="Util\AvalonPassportCoder.cs" />
     <Compile Include="Util\Base58Encoding.cs" />
     <Compile Include="Util\CookieAuthentication.cs" />
     <Compile Include="Util\FileHelper.cs" />
@@ -134,6 +157,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -143,9 +167,31 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Security\App_Config\ConfigurationSectionDesigner.csd">
+      <Generator>CsdFileGenerator</Generator>
+      <LastGenOutput>ConfigurationSectionDesigner.csd.cs</LastGenOutput>
+    </None>
+    <None Include="Security\App_Config\ConfigurationSectionDesigner.csd.config">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </None>
+    <None Include="Security\App_Config\ConfigurationSectionDesigner.csd.diagram">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </None>
+    <None Include="Security\App_Config\ConfigurationSectionDesigner.csd.xsd">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Security\App_Config\Cryptography.config" />
+    <None Include="Security\App_Config\Readme\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Security\App_Config\Schemas\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

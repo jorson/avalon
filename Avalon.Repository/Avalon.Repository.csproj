@@ -143,6 +143,7 @@
     <Compile Include="Querys\IQuerySourceProvider.cs" />
     <Compile Include="Querys\IQuerySpecification.cs" />
     <Compile Include="Querys\IQuerySpecificationProvider.cs" />
+    <Compile Include="Querys\ODataFilterAttribute.cs" />
     <Compile Include="Querys\ODatas\LinqToODataStrings\LinqToODataStringVisitor.cs" />
     <Compile Include="Querys\ODatas\LinqToODataStrings\ODataStringBuilder.cs" />
     <Compile Include="Querys\ODatas\ODataExpressionVisitor.cs" />

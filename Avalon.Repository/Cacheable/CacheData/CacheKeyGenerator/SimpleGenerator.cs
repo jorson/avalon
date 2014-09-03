@@ -63,7 +63,8 @@ namespace Avalon.Framework
         {
             Type type = o.GetType();
             var ta = TypeAccessor.GetAccessor(type);
-            SerializeDictionary(ta.GetFieldValueDictionary(o), sb, depth, objectsInUse);
+            IDictionary<string, object> dic = ta.FieldAccessDic.ToDictionary(f => f.Key, f => f.Value.Getter(o));
+            SerializeDictionary(dic, sb, depth, objectsInUse);
         }
 
         static void SerializeDateTime(DateTime datetime, StringBuilder sb)

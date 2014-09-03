@@ -26,12 +26,7 @@ namespace Avalon.Framework
         public ShardConfig ShardStrategy<TShardStrategy>(object attributes) where TShardStrategy : IShardStrategy
         {
             var ta = TypeAccessor.GetAccessor(attributes.GetType());
-            var d = ta.GetFieldValueDictionary(attributes);
-            var sd = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, object> entry in d)
-            {
-                sd.Add(entry.Key, entry.Value.ToString());
-            }
+            var sd = ta.FieldAccessDic.ToDictionary(o => o.Key, o => o.Value.Getter(attributes).ToString());
             return ShardStrategy<TShardStrategy>(sd);
         }
 

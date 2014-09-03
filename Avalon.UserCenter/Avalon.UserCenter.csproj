@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07392AD9-FA81-4840-93CF-FA81F0A58134}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Avalon.UserCenter</RootNamespace>
+    <AssemblyName>Avalon.UserCenter</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AucConfig.cs" />
+    <Compile Include="Base\AppBaseService.cs" />
+    <Compile Include="Base\DisplayNameExtend.cs" />
+    <Compile Include="Base\EnumExtend.cs" />
+    <Compile Include="Base\IAppBaseRepositorys.cs" />
+    <Compile Include="Base\IKeyValueRepository.cs" />
+    <Compile Include="Base\IpInfo.cs" />
+    <Compile Include="Base\MsgUtil.cs" />
+    <Compile Include="Base\ShieldUtil.cs" />
+    <Compile Include="Base\StoreObjectUtil.cs" />
+    <Compile Include="Base\Validor.cs" />
+    <Compile Include="Base\WebSiteBaseSetting.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RsaUtility.cs" />
+    <Compile Include="Users\AucLogConst.cs" />
+    <Compile Include="Users\IDCardRetrieve.cs" />
+    <Compile Include="Users\IUserLogsRepository.cs" />
+    <Compile Include="Users\IUserRepository.cs" />
+    <Compile Include="Users\ManulRetrieve.cs" />
+    <Compile Include="Users\PasswordService.cs" />
+    <Compile Include="Users\Solution.cs" />
+    <Compile Include="Users\SolutionValid.cs" />
+    <Compile Include="Users\ThirdPartyClient\IdStarClient.cs" />
+    <Compile Include="Users\ThirdPartyClient\QQAccountClient.cs" />
+    <Compile Include="Users\ThirdPartyClient\SinaWeiboClient.cs" />
+    <Compile Include="Users\ThirdPartyClient\UapClient.cs" />
+    <Compile Include="Users\ThirdPartyService.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\UserAccount.cs" />
+    <Compile Include="Users\UserAccountService.cs" />
+    <Compile Include="Users\UserInterceptor.cs" />
+    <Compile Include="Users\UserLoginLog.cs" />
+    <Compile Include="Users\UserMainHistoryLog.cs" />
+    <Compile Include="Users\UserPasswordErrorStat.cs" />
+    <Compile Include="Users\UserRegisterLog.cs" />
+    <Compile Include="Users\UserSecurity.cs" />
+    <Compile Include="Users\UserService.cs" />
+    <Compile Include="Users\UserValid.cs" />
+    <Compile Include="VerifyCode\EmailVerify.cs" />
+    <Compile Include="VerifyCode\IEmailVerifyRepository.cs" />
+    <Compile Include="VerifyCode\IMobileVerifyRepository.cs" />
+    <Compile Include="VerifyCode\IVerifyStatRepositorys.cs" />
+    <Compile Include="VerifyCode\MobileVerify.cs" />
+    <Compile Include="VerifyCode\MobileVerifyCodeStat.cs" />
+    <Compile Include="VerifyCode\PicVerifyIpStat.cs" />
+    <Compile Include="VerifyCode\PicVerifyIpStatType.cs" />
+    <Compile Include="VerifyCode\UserVeriyCodeRepeateSendStat.cs" />
+    <Compile Include="VerifyCode\VerifyCode.cs" />
+    <Compile Include="VerifyCode\VerifyCodeService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Avalon.Cache\Avalon.Cache.csproj">
+      <Project>{5c1bd726-ca74-4201-aedb-b1350ab9972c}</Project>
+      <Name>Avalon.Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.CloudClient\Avalon.CloudClient.csproj">
+      <Project>{682afa21-4191-48a5-b2b4-434a30d9749d}</Project>
+      <Name>Avalon.CloudClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Framework\Avalon.Framework.csproj">
+      <Project>{2d80cd45-97fe-41aa-b95e-250490e76dae}</Project>
+      <Name>Avalon.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.HttpClient\Avalon.HttpClient.csproj">
+      <Project>{d58262f4-c36d-4f22-86c0-fd7460980c27}</Project>
+      <Name>Avalon.HttpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
+      <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
+      <Name>Avalon.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.UserCenter.Models\Avalon.UserCenter.Models.csproj">
+      <Project>{2307c827-3032-4ade-a943-9a7fd4cc0a8f}</Project>
+      <Name>Avalon.UserCenter.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
+      <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
+      <Name>Avalon.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
