@@ -93,10 +93,6 @@
       <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
       <Name>Avalon.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Avalon.UCenter\Avalon.UCenter.csproj">
-      <Project>{49466c35-9c3a-4fcf-86a0-ec9064a70800}</Project>
-      <Name>Avalon.UCenter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
       <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
       <Name>Avalon.Utility</Name>

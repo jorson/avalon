@@ -30,3 +30,13 @@ Avalon.Utility/bin/
 Avalon.Utility/obj/
 Avalon.WebUtility/bin/
 Avalon.WebUtility/obj/
+Avalon.CloudClient/bin/
+Avalon.CloudClient/obj/Debug/Avalon.CloudClient.csproj.FileListAbsolute.txt
+Avalon.CloudClient/obj/Debug/Avalon.CloudClient.dll
+Avalon.UserCenter.Models/bin/Debug/Antlr3.Runtime.dll
+Avalon.UserCenter.Models/bin/Debug/Avalon.Cache.dll
+Avalon.UserCenter.Models/bin/
+Avalon.UserCenter/bin/
+Avalon.CloudClient/obj/
+Avalon.UserCenter.Models/obj/
+Avalon.UserCenter/obj/
