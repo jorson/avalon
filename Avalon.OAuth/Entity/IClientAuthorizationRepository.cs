@@ -11,4 +11,9 @@ namespace Avalon.OAuth
     {
         PagingResult<ClientAuthorization> GetClientAuthorizationList(ClientAuthorizationFilter filter);
     }
+
+    public interface IAppAdminRepository : INoShardRepository<AppAdmin>
+    {
+
+    }
 }

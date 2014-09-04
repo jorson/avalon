@@ -19,4 +19,20 @@ namespace Avalon.OAuth
         /// </summary>
         Disabled = 1
     }
+
+    public static partial class EnumHelper
+    {
+        public static string ToName(this ClientAuthorizeStatus clientAuthorizeStatus)
+        {
+            switch (clientAuthorizeStatus)
+            {
+                case ClientAuthorizeStatus.Normal:
+                    return "正常";
+                case ClientAuthorizeStatus.Disabled:
+                    return "禁用";
+                default:
+                    return "";
+            }
+        }
+    }
 }

@@ -43,5 +43,15 @@ namespace Avalon.OAuth
         {
             return ExpireTime < NetworkTime.Now;
         }
+
+        public virtual AuthorizationCodeResult ToResult()
+        {
+            return new AuthorizationCodeResult { code = Code };
+        }
+    }
+
+    public class AuthorizationCodeResult
+    {
+        public string code { get; set; }
     }
 }

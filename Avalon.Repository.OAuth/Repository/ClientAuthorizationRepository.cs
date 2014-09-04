@@ -35,4 +35,9 @@ namespace Avalon.Repository.OAuth.Repository
             return result;
         }
     }
+
+    public class AppAdminRepository : AbstractNoShardRepository<AppAdmin>, IAppAdminRepository
+    {
+
+    }
 }

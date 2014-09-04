@@ -49,4 +49,30 @@ namespace Avalon.Repository.OAuth.Mapping
         }
     }
 
+    public class AppAdminMapping : ClassMap<AppAdmin>
+    {
+        public AppAdminMapping()
+        {
+            Table("c_appadmin");
+
+            Id(o => o.Id).GeneratedBy.Native();
+            Map(o => o.UserId);
+            Map(o => o.AppIdList).CustomType<JsonListUserType<CustomAppInfo>>();
+            Map(o => o.CreateTime).CustomType("timestamp");
+            Map(o => o.Description);
+        }
+    }
+
+    public class AppAdminDefine : ClassDefine<AppAdmin>
+    {
+        public AppAdminDefine()
+        {
+            Id(o => o.Id);
+            Map(o => o.CreateTime);
+            Map(o => o.UserId);
+            Map(o => o.AppIdList);
+            Map(o => o.Description);
+        }
+    }
+
 }

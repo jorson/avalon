@@ -30,15 +30,16 @@ namespace Avalon.OAuth
             MappingType = MessageUtil.GetInt32(request, "mappingtype");
         }
 
-        public override AccessGrant Token()
+        public override object Token()
         {
-            ValidClient();
+            //ValidClient();
 
-            var result = OAuthService.ValidThirdToken(AccessToken, MappingType, PlatCode, Browser, IpAddress, ExtendField);
-            if (result.Code != 0)
-                OAuthError(result.Code.ToString(), result.Message, result.Code);
+            //var result = OAuthService.ValidThirdToken(AccessToken, MappingType, PlatCode, Browser, IpAddress, ExtendField);
+            //if (result.Code != 0)
+            //    OAuthError(result.Code.ToString(), result.Message, result.Code);
 
-            return OAuthService.CreateAccessGrant(ClientId, ClientCode, result.UserId);
+            //return OAuthService.CreateAccessGrant(ClientId, ClientCode, result.UserId, TerminalCode);
+            throw new NotImplementedException();
         }
     }
 }

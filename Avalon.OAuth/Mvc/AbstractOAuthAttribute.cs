@@ -9,10 +9,20 @@ namespace Avalon.OAuth
 {
     public class AbstractOAuthAttribute : AuthorizeAttribute
     {
+        /// <summary>
+        /// accesstoken 仅从query 中获取
+        /// </summary>
+        public bool QueryStringOnly { get; set; }
+
+        /// <summary>
+        /// 授权的范围
+        /// </summary>
+        public string OAuthScope { get; set; }
+
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var oauthService = Avalon.Framework.DependencyResolver.Resolve<OAuthService>();
-            var accessGrant = OAuthAuthorization.ValidToken(filterContext.HttpContext);
+            var accessGrant = OAuthAuthorization.ValidToken(filterContext.HttpContext, QueryStringOnly);
             OnValidSuccess(filterContext, accessGrant);
         }
 

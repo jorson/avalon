@@ -39,6 +39,16 @@ namespace Avalon.OAuth
         /// 使用信任客户端的 AppToken 获得用户的 UserToken
         /// </summary>
         UserToken = 4,
+
+        /// <summary>
+        /// 系统模块用于刷新给定的 AccessToken(HHB 2013-12-30)
+        /// </summary>
+        SystemRefreshToken = 5,
+
+        /// <summary>
+        /// The third token.
+        /// </summary>
+        ThirdToken = 6
     }
 
     internal static class GrantTypeExtend
@@ -67,6 +77,12 @@ namespace Avalon.OAuth
                 case "user_token":
                     grantType = GrantType.UserToken;
                     return true;
+                case "system_refresh_token":
+                    grantType = GrantType.SystemRefreshToken;
+                    return true;
+                case "thirdtoken":
+                    grantType = GrantType.ThirdToken;
+                    return true;
             }
             return false;
         }
@@ -82,9 +98,11 @@ namespace Avalon.OAuth
                 case GrantType.ClientCredentials:
                     return "client_credentials";
                 case GrantType.RefreshToken:
-                    return "refresh_token"; 
+                    return "refresh_token";
                 case GrantType.UserToken:
                     return "user_token";
+                case GrantType.SystemRefreshToken:
+                    return "system_refresh_token";
             }
             return "";
         }

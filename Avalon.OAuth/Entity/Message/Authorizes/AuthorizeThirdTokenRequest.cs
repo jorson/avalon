@@ -25,15 +25,17 @@ namespace Avalon.OAuth
             MappingType = MessageUtil.GetInt32(request, "mappingtype");
         }
 
-        public override AuthorizationCode Authorize()
+        public override object Authorize()
         {
-            base.Authorize();
+            //base.Authorize();
 
-            var result = OAuthService.ValidThirdToken(AccessToken, MappingType, PlatCode, Browser, IpAddress, ExtendField);
-            if (result.Code != 0)
-                OAuthError(result.Code.ToString(), result.Message, 400);
+            //var result = OAuthService.ValidThirdToken(AccessToken, MappingType, PlatCode, Browser, IpAddress, ExtendField);
+            //if (result.Code != 0)
+            //    OAuthError(result.Code.ToString(), result.Message, 400);
 
-            return OAuthService.CreateAuthorizationCode(ClientId, result.UserId);
+            //return OAuthService.CreateAuthorizationCode(ClientId, result.UserId);
+
+            throw new NotImplementedException();
         }
     }
 }

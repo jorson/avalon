@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Avalon.Framework;
+using Avalon.UserCenter;
+using Avalon.UserCenter.Models;
 
 namespace Avalon.OAuth
 {
@@ -15,21 +17,24 @@ namespace Avalon.OAuth
 
         IClientAuthorizationRepository clientRepository;
         IAccessGrantRepository tokenRepository;
-        IUserProxyRepository userRepository;
         IAuthorizationCodeRepository codeRepository;
+        IAppAdminRepository appAdminRepository;
         CacheDomain<AccessGrant, string> accessGrantCache;
+        UserService userService;
 
-        public OAuthService(IClientAuthorizationRepository clientRepository, IAccessGrantRepository tokenRepository, IAuthorizationCodeRepository codeRepository, IUserProxyRepository userRepository)
+
+        public OAuthService(IClientAuthorizationRepository clientRepository, IAccessGrantRepository tokenRepository, IAuthorizationCodeRepository codeRepository, UserService userService, IAppAdminRepository appAdminRepository)
         {
             this.clientRepository = clientRepository;
             this.tokenRepository = tokenRepository;
             this.codeRepository = codeRepository;
-            this.userRepository = userRepository;
+            this.userService = userService;
+            this.appAdminRepository = appAdminRepository;
 
             accessGrantCache = CacheDomain.CreateSingleKey<AccessGrant, string>(
                 o => o.AccessToken,
                 GetAccessGrantInner,
-                null, 
+                null,
                 CacheConsts.AccessGrantCacheName,
                 CacheConsts.AccessGrantCacheFormat
                 );
@@ -100,11 +105,11 @@ namespace Avalon.OAuth
             return null;
         }
 
-        public virtual AccessGrant TokenValid(HttpContextBase context)
+        public virtual AccessGrant TokenValid(HttpContextBase context, bool queryStringOnly = false)
         {
             Arguments.NotNull(context, "context");
 
-            var accessToken = MessageUtil.ParseAccessToken(context.Request);
+            var accessToken = MessageUtil.ParseAccessToken(context.Request, queryStringOnly);
             return TokenValid(accessToken);
         }
 
@@ -136,9 +141,9 @@ namespace Avalon.OAuth
             return tokenRepository.FindOne(spec);
         }
 
-        public AccessGrant CreateAccessGrant(int appId, int appCode = 0, long userId = 0)
+        public AccessGrant CreateAccessGrant(int appId, int appCode = 0, long userId = 0, int terminalCode = 0)
         {
-            AccessGrant accessGrant = new AccessGrant(appId, appCode, userId);
+            AccessGrant accessGrant = new AccessGrant(appId, appCode, userId, terminalCode);
             tokenRepository.Create(accessGrant);
             return accessGrant;
         }
@@ -146,6 +151,11 @@ namespace Avalon.OAuth
         public void CreateAccessGrant(AccessGrant accessGrant)
         {
             tokenRepository.Create(accessGrant);
+        }
+
+        public void UpdateAccessGrant(AccessGrant accessGrant)
+        {
+            tokenRepository.Update(accessGrant);
         }
 
         public void DeleteAccessGrant(AccessGrant accessGrant)
@@ -183,19 +193,35 @@ namespace Avalon.OAuth
         }
         #endregion
 
-        public ValidResult ValidPassword(string userName, string password, long platCode, string browser = null, string ipAddress = null, string extendFiled = null)
+        public ValidResult ValidPassword(string identity, string password, long ipAddress, int appId, int terminalCode, string solution, string sessionId, string verifyCode)
         {
-            return userRepository.ValidPassword(userName, password, platCode, browser, ipAddress, extendFiled);
-        }
+            ResultWrapper<UserCode, LoginOrRegisterResult> rt;
+            object data = null;
+            if (!string.IsNullOrEmpty(solution))
+            {
+                rt = userService.TryPasswordSolutionLogin(identity, password, solution, ipAddress, appId, terminalCode, sessionId, verifyCode);
+            }
+            else
+            {
+                rt = userService.TryLogin(identity, password, ipAddress, appId, terminalCode, sessionId, verifyCode);
+            }
+            if (rt.Code != UserCode.Success)
+            {
+                data = rt.Data;
+            }
 
-        public ValidResult ValidThirdToken(string accessToken, int mappingType, long platCode, string browser = null, string ipAddress = null, string extendFiled = null)
-        {
-            return userRepository.ValidThirdToken(accessToken, mappingType, platCode, browser, ipAddress, extendFiled);
+            return new ValidResult
+            {
+                UserId = rt.Data.UserId,
+                Code = (int)rt.Code,
+                Message = rt.Message ?? rt.Code.GetDescription(),
+                Data = data,
+            };
         }
 
         public ValidResult ValidPassport91(long password91Id, string userName, string password, string cookieOrdernumberMaster, string cookieOrdernumberSlave, string cookieCheckcode, string cookieSiteflag, long platCode, string browser = null, string ipAddress = null, string extendFiled = null)
         {
-            return userRepository.ValidPassport91(password91Id, userName, password, cookieOrdernumberMaster, cookieOrdernumberSlave, cookieCheckcode, cookieSiteflag, platCode, browser, ipAddress, extendFiled);
+            throw new NotImplementedException();
         }
 
         public ClientAuthorization GetClientAuthorization(int clientId)
@@ -227,15 +253,46 @@ namespace Avalon.OAuth
             return entity;
         }
 
+        public ClientAuthorization CreateClientAuthorization(ClientAuthorization entity)
+        {
+            clientRepository.Create(entity);
+            return entity;
+        }
+
+        public ClientAuthorization UpdateClientAuthorization(ClientAuthorization entity)
+        {
+            clientRepository.Update(entity);
+            return entity;
+        }
+
         public PagingResult<ClientAuthorization> GetClientAuthorizationList(ClientAuthorizationFilter filter)
         {
             return clientRepository.GetClientAuthorizationList(filter);
+        }
+
+        public IEnumerable<ClientAuthorization> GetClientAuthorizationList(IEnumerable<int> appIds)
+        {
+            var spec = clientRepository.CreateSpecification().Where(o => appIds.Contains(o.ClientId));
+            return clientRepository.FindAll(spec);
         }
 
         [DebuggerStepThrough]
         void OAuthError(string errorCode, string message, int code = 400)
         {
             throw new OAuthException(errorCode, message, code);
+        }
+
+        /// <summary>
+        /// 用户是否是应用管理员
+        /// </summary>
+        /// <param name="userId">用户标识</param>
+        /// <param name="appId">应用标识</param>
+        /// <returns></returns>
+        public bool UserIsAppAdmin(long userId, int appId)
+        {
+            var spec = appAdminRepository.CreateSpecification().Where(o => o.UserId == userId);
+            var appAdim = appAdminRepository.FindOne(spec);
+            return appAdim != null && appAdim.AppIdList.Contains(new CustomAppInfo { AppId = appId });
         }
     }
 }

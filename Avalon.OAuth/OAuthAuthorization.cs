@@ -57,9 +57,9 @@ namespace Avalon.OAuth
             return ValidToken(new HttpContextWrapper(HttpContext.Current));
         }
 
-        public static AccessGrant ValidToken(HttpContextBase context)
+        public static AccessGrant ValidToken(HttpContextBase context, bool queryStringOnly = false)
         {
-            var accessGrant = oauthService.TokenValid(context);
+            var accessGrant = oauthService.TokenValid(context, queryStringOnly);
             context.Items[ContextAccessGrantKey] = accessGrant;
             return accessGrant;
         }
@@ -82,12 +82,12 @@ namespace Avalon.OAuth
             return false;
         }
 
-        public static void AppendRequestData(RequestContext context, string name, object value)
+        public static void AppendRequestData(RequestContext context, string name, object value, bool queryStringOnly = false)
         {
             var request = context.HttpContext.Request;
             if (String.IsNullOrEmpty(request.QueryString[name]))
             {
-                if (String.IsNullOrEmpty(request.Form[name]))
+                if (!queryStringOnly && String.IsNullOrEmpty(request.Form[name]))
                 {
                     if (!context.RouteData.Values.ContainsKey(name))
                         context.RouteData.Values.Add(name, value);

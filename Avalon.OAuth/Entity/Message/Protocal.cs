@@ -43,6 +43,11 @@ namespace Avalon.OAuth
         internal const string client_code = "client_code";
 
         /// <summary>
+        /// The "terminal_code" string.
+        /// </summary>
+        internal const string terminal_code = "terminal_code";
+
+        /// <summary>
         /// The "code" string.
         /// </summary>
         internal const string code = "code";
@@ -85,6 +90,23 @@ namespace Avalon.OAuth
         /// The "password" string.
         /// </summary>
         internal const string password = "password";
+
+        /// <summary>
+        /// The "solution" string.
+        /// </summary>
+        internal const string solution = "solution";
+
+        /// <summary>
+        /// The "sessionid" string.
+        /// </summary>
+        internal const string sessionid = "session_id";
+
+        /// <summary>
+        /// The "verifycode" string.
+        /// </summary>
+        internal const string verifycode = "verifycode";
+
+        internal const string ipaddress = "ipaddress";
 
 
         /// <summary>

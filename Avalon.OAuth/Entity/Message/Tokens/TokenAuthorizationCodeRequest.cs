@@ -27,7 +27,7 @@ namespace Avalon.OAuth
             RedirectUri = new Uri(MessageUtil.GetString(request, Protocal.redirect_uri));
         }
 
-        public override AccessGrant Token()
+        public override object Token()
         {
             ValidClient();
 
@@ -46,7 +46,7 @@ namespace Avalon.OAuth
 
             OAuthService.DeleteAuthorizationCode(code);
 
-            return OAuthService.CreateAccessGrant(ClientId, ClientCode, code.UserId);
+            return OAuthService.CreateAccessGrant(ClientId, ClientCode, code.UserId, TerminalCode);
         }
     }
 

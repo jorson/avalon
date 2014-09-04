@@ -25,7 +25,7 @@ namespace Avalon.OAuth
             AccessToken = MessageUtil.GetAccessToken(request);
         }
 
-        public override AccessGrant Token()
+        public override object Token()
         {
             ValidClient();
 
@@ -38,7 +38,7 @@ namespace Avalon.OAuth
             if (UserId == 0)
                 OAuthError(AccessTokenRequestErrorCodes.InvalidRequest, "invalid userid");
 
-            return OAuthService.CreateAccessGrant(accessGrant.ClientId, accessGrant.ClientCode, UserId);
+            return OAuthService.CreateAccessGrant(accessGrant.ClientId, accessGrant.ClientCode, UserId, accessGrant.TerminalCode);
         }
     }
 }

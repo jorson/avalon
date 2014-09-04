@@ -1,0 +1,10 @@
+﻿Install-Package -Id Antlr -IgnoreDependencies -Version 3.4.1.9004
+Install-Package -Id Castle.Core -IgnoreDependencies -Version 3.2.0
+Install-Package -Id FluentNHibernate -IgnoreDependencies -Version 1.3.0.717
+Install-Package -Id Iesi.Collections -IgnoreDependencies -Version 3.2.0.4000
+Install-Package -Id mongocsharpdriver -IgnoreDependencies -Version 1.7
+Install-Package -Id NHibernate -IgnoreDependencies -Version 3.2.0.4000
+Install-Package -Id Remotion.Linq -IgnoreDependencies -Version 1.13.183.0
+Install-Package -Id ServiceStack.Common -IgnoreDependencies -Version 3.9.4
+Install-Package -Id ServiceStack.Redis -IgnoreDependencies -Version 3.9.40
+Install-Package -Id ServiceStack.Text -IgnoreDependencies -Version 3.9.42

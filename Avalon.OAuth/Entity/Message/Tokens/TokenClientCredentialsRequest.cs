@@ -12,10 +12,10 @@ namespace Avalon.OAuth
             get { return GrantType.ClientCredentials; }
         }
 
-        public override AccessGrant Token()
+        public override object Token()
         {
             ValidClient();
-            return OAuthService.CreateAccessGrant(ClientId);
+            return OAuthService.CreateAccessGrant(ClientId, ClientCode, 0, TerminalCode);
         }
     }
 }

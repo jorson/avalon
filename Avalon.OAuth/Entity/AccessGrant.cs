@@ -18,11 +18,12 @@ namespace Avalon.OAuth
         {
         }
 
-        public AccessGrant(int clientId, int clientCode = 0, long userId = 0)
+        public AccessGrant(int clientId, int clientCode = 0, long userId = 0, int terminalCode = 0)
         {
             ClientId = clientId;
             ClientCode = clientCode;
             UserId = userId;
+            TerminalCode = terminalCode;
 
             AccessToken = Guid.NewGuid().ToString("N");
             RefreshToken = Guid.NewGuid().ToString("N");
@@ -72,9 +73,14 @@ namespace Avalon.OAuth
         public virtual int ClientId { get; set; }
 
         /// <summary>
-        /// 端编号
+        /// 自定义编号
         /// </summary>
         public virtual int ClientCode { get; set; }
+
+        /// <summary>
+        /// 终端编号
+        /// </summary>
+        public virtual int TerminalCode { get; set; }
 
         /// <summary>
         /// 用户标识（为0表示与用户无关）
@@ -96,9 +102,9 @@ namespace Avalon.OAuth
             return RefreshExpireTime < NetworkTime.Now;
         }
 
-        public virtual AccessGrantModel ToModel()
+        public virtual AccessGrantResult ToResult()
         {
-            return new AccessGrantModel
+            return new AccessGrantResult
             {
                 access_token = AccessToken,
                 refresh_token = RefreshToken,
@@ -111,7 +117,7 @@ namespace Avalon.OAuth
         }
     }
 
-    public class AccessGrantModel
+    public class AccessGrantResult
     {
         /// <summary>
         /// APP_KEY

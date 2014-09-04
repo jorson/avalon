@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalon.Security.Cryptography.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -19,17 +20,17 @@ namespace Avalon.OAuth
 
         public int ClientCode { get; private set; }
 
+        public int TerminalCode { get; private set; }
+
         public abstract GrantType GrantType { get; }
 
         public virtual void Parse(HttpRequestBase request)
         {
-            var authorization = request.Headers[HttpRequestHeaders.Authorization];
-            if (!String.IsNullOrEmpty(authorization))
+            var authorizationuser = new AuthorizationUser();
+            if (request.ValidAuthorizationBase(out authorizationuser))
             {
-                var auth = Encoding.ASCII.GetString(Convert.FromBase64String(authorization.Substring(6)));
-                var vs = auth.Split(':');
-                ClientId = Int32.Parse(vs[0]);
-                ClientSecret = vs[1];
+                ClientId = authorizationuser.UserId;
+                ClientSecret = authorizationuser.Password;
             }
             else
             {
@@ -39,10 +40,14 @@ namespace Avalon.OAuth
                 var code = MessageUtil.TryGetString(request, Protocal.client_code);
                 if (!string.IsNullOrEmpty(code))
                     ClientCode = MessageUtil.GetInt32(request, Protocal.client_code);
+
+                var terminalCode = MessageUtil.TryGetString(request, Protocal.terminal_code);
+                if (!string.IsNullOrEmpty(terminalCode))
+                    TerminalCode = MessageUtil.GetInt32(request, Protocal.terminal_code);
             }
         }
 
-        public abstract AccessGrant Token();
+        public abstract object Token();
 
         protected void ValidClient()
         {

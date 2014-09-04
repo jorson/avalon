@@ -54,28 +54,32 @@
     <Compile Include="Entity\IAccessGrantRepository.cs" />
     <Compile Include="Entity\IAuthorizationCodeRepository.cs" />
     <Compile Include="Entity\IClientAuthorizationRepository.cs" />
-    <Compile Include="Entity\IUserProxyRepository.cs" />
     <Compile Include="Entity\Message\Authorizes\AuthorizeCodeRequest.cs" />
     <Compile Include="Entity\Message\Authorizes\AuthorizeRequestBase.cs" />
     <Compile Include="Entity\Message\Authorizes\AuthorizeThirdTokenRequest.cs" />
     <Compile Include="Entity\Message\Authorizes\AuthorizeUserCenterRequest.cs" />
     <Compile Include="Entity\Message\MessageUtil.cs" />
     <Compile Include="Entity\Message\Protocal.cs" />
+    <Compile Include="Entity\Message\Tokens\SystemTokenRefreshRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenAuthorizationCodeRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenClientCredentialsRequest.cs" />
+    <Compile Include="Entity\Message\Tokens\TokenFailedResponse.cs" />
     <Compile Include="Entity\Message\Tokens\TokenLoginRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenPasswordThirdTokenRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenPasswordUserCenterRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenRefreshRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenRequestBase.cs" />
+    <Compile Include="Entity\Message\Tokens\TokenResponse.cs" />
+    <Compile Include="Entity\Message\Tokens\TokenThirdTokenRequest.cs" />
     <Compile Include="Entity\Message\Tokens\TokenUserRequest.cs" />
     <Compile Include="Entity\ResponseType.cs" />
-    <Compile Include="Entity\UserProxy.cs" />
+    <Compile Include="Entity\ValidResult.cs" />
     <Compile Include="Entity\VerifyCodeType.cs" />
     <Compile Include="Mvc\AbstractOAuthAttribute.cs" />
     <Compile Include="Mvc\HttpRequestHeaders.cs" />
-    <Compile Include="Mvc\OAuthUnauthorizedResult.cs" />
+    <Compile Include="Mvc\OAuthType.cs" />
     <Compile Include="OAuthAuthorization.cs" />
+    <Compile Include="OAuthContext.cs" />
     <Compile Include="OAuthException.cs" />
     <Compile Include="OAuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +116,14 @@
     <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
       <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>
       <Name>Avalon.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.UserCenter.Models\Avalon.UserCenter.Models.csproj">
+      <Project>{2307c827-3032-4ade-a943-9a7fd4cc0a8f}</Project>
+      <Name>Avalon.UserCenter.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.UserCenter\Avalon.UserCenter.csproj">
+      <Project>{07392ad9-fa81-4840-93cf-fa81f0a58134}</Project>
+      <Name>Avalon.UserCenter</Name>
     </ProjectReference>
     <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
       <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>

@@ -26,22 +26,26 @@ namespace Avalon.OAuth
         {
             Arguments.NotNull(request, "request");
 
-            AccountType accountType;
-            if (!AccountTypeExtend.TryParse(GetString(request, Protocal.account_type), out accountType))
-                throw new OAuthException(AccessTokenRequestErrorCodes.InvalidRequest, "wrong account_type value", 400);
+            //AccountType accountType;
+            //if (!AccountTypeExtend.TryParse(GetString(request, Protocal.account_type), out accountType))
+            //    throw new OAuthException(AccessTokenRequestErrorCodes.InvalidRequest, "wrong account_type value", 400);
 
             AuthorizeRequestBase authorizationRequest = null;
-            switch (accountType)
-            {
-                case AccountType.ThirdToken:
-                    authorizationRequest = new AuthorizeThirdTokenRequest();
-                    break;
-                case AccountType.UserCenter:
-                    authorizationRequest = new AuthorizeUserCenterRequest();
-                    break;
-                default:
-                    throw new OAuthException(AccessTokenRequestErrorCodes.UnsupportedAccountType, "account_type: " + accountType.ToValue(), 400);
-            }
+            //switch (accountType)
+            //{
+            //    case AccountType.Passport91:
+            //        authorizationRequest = new AuthorizePassport91Request();
+            //        break;
+            //    case AccountType.ThirdToken:
+            //        authorizationRequest = new AuthorizeThirdTokenRequest();
+            //        break;
+            //    case AccountType.AUC:
+            //        authorizationRequest = new AuthorizeUserCenterRequest();
+            //        break;
+            //    default:
+            //        throw new OAuthException(AccessTokenRequestErrorCodes.UnsupportedAccountType, "account_type: " + accountType.ToValue(), 400);
+            //}
+            authorizationRequest = new AuthorizeUserCenterRequest();
             authorizationRequest.Parse(request);
             return authorizationRequest;
         }
@@ -63,20 +67,7 @@ namespace Avalon.OAuth
             switch (grantType)
             {
                 case GrantType.Password:
-                    AccountType accountType;
-                    if (!AccountTypeExtend.TryParse(GetString(request, Protocal.account_type), out accountType))
-                        throw new OAuthException(AccessTokenRequestErrorCodes.InvalidRequest, "wrong account_type value", 400);
-                    switch (accountType)
-                    {
-                        case AccountType.UserCenter:
-                            tokenRequest = new TokenPasswordUserCenterRequest();
-                            break;
-                        case AccountType.ThirdToken:
-                            tokenRequest = new TokenPasswordThirdTokenRequest();
-                            break;
-                        default:
-                            throw new OAuthException(AccessTokenRequestErrorCodes.UnsupportedAccountType, "account_type: " + accountType.ToValue(), 400);
-                    }
+                    tokenRequest = new TokenPasswordUserCenterRequest();
                     break;
                 case GrantType.ClientCredentials:
                     tokenRequest = new TokenClientCredentialsRequest();
@@ -84,11 +75,17 @@ namespace Avalon.OAuth
                 case GrantType.RefreshToken:
                     tokenRequest = new TokenRefreshRequest();
                     break;
+                case GrantType.SystemRefreshToken:
+                    tokenRequest = new SystemTokenRefreshRequest();
+                    break;
                 case GrantType.AuthorizationCode:
                     tokenRequest = new TokenAuthorizationCodeRequest();
                     break;
                 case GrantType.UserToken:
                     tokenRequest = new TokenUserRequest();
+                    break;
+                case GrantType.ThirdToken:
+                    tokenRequest = new TokenThirdTokenRequest();
                     break;
                 default:
                     throw new OAuthException(AccessTokenRequestErrorCodes.UnsupportedGrantType, "grant_type: " + grantType.ToValue(), 400);
@@ -102,9 +99,9 @@ namespace Avalon.OAuth
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static string ParseAccessToken(HttpRequestBase request)
+        public static string ParseAccessToken(HttpRequestBase request, bool queryStringOnly = false)
         {
-            var accessToken = TryParseAccessToken(request);
+            var accessToken = TryParseAccessToken(request, queryStringOnly);
 
             if (String.IsNullOrWhiteSpace(accessToken))
                 throw new OAuthException(BearerTokenErrorCodes.InvalidToken, "access_token null", 401);
@@ -112,13 +109,22 @@ namespace Avalon.OAuth
             return accessToken;
         }
 
-        public static string TryParseAccessToken(HttpRequestBase request)
+        public static string TryParseAccessToken(HttpRequestBase request, bool queryStringOnly = false)
         {
-            var accessToken = request[Protocal.access_token];
+            string accessToken = null;
+            if (queryStringOnly)
+                accessToken = request.QueryString[Protocal.access_token];
+            else
+                accessToken = request[Protocal.access_token];
 
             //兼容之前的接口
             if (String.IsNullOrWhiteSpace(accessToken))
-                accessToken = request[Protocal.accesstoken];
+            {
+                if (queryStringOnly)
+                    accessToken = request.QueryString[Protocal.accesstoken];
+                else
+                    accessToken = request[Protocal.accesstoken];
+            }
 
             return accessToken;
         }

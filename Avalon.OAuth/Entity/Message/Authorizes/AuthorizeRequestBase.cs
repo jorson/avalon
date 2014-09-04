@@ -22,13 +22,11 @@ namespace Avalon.OAuth
 
         public string Scope { get; private set; }
 
-        public long PlatCode { get; private set; }
-
-        public string Browser { get; set; }
-
         public string IpAddress { get; set; }
 
-        public string ExtendField { get; set; }
+        public long IpAddressInt { get; private set; }
+
+        public int TerminalCode { get; private set; }
 
         public abstract AccountType AccountType { get; }
 
@@ -38,13 +36,16 @@ namespace Avalon.OAuth
             RedirectUri = new Uri(MessageUtil.GetString(request, Protocal.redirect_uri));
             State = MessageUtil.TryGetString(request, Protocal.state);
             Scope = MessageUtil.TryGetString(request, Protocal.scope);
-            PlatCode = MessageUtil.GetInt64(request, "platcode");
-            Browser = MessageUtil.TryGetString(request, "browser");
-            IpAddress = MessageUtil.TryGetString(request, "ipaddress");
-            ExtendField = MessageUtil.TryGetString(request, "extendfield");
+            IpAddress = MessageUtil.TryGetString(request, Protocal.ipaddress);
+
+            var terminalCode = MessageUtil.TryGetString(request, Protocal.terminal_code);
+            if (!string.IsNullOrEmpty(terminalCode))
+                TerminalCode = MessageUtil.GetInt32(request, Protocal.terminal_code);
+
+            IpAddressInt = Avalon.Utility.IpAddress.IpToInt(IpAddress);
         }
 
-        public virtual AuthorizationCode Authorize()
+        public virtual object Authorize()
         {
             var client = OAuthService.GetClientAuthorization(ClientId);
 

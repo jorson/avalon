@@ -12,6 +12,14 @@ namespace Avalon.OAuth
 
         public string Password { get; private set; }
 
+        public string Solution { get; private set; }
+
+        public string SessionId { get; private set; }
+
+        public string VerifyCode { get; private set; }
+
+        private bool IsShowCode;
+
         public override GrantType GrantType
         {
             get { return GrantType.Password; }
@@ -27,17 +35,23 @@ namespace Avalon.OAuth
             base.Parse(request);
             UserName = MessageUtil.GetString(request, Protocal.username);
             Password = MessageUtil.GetString(request, Protocal.password);
+            Solution = MessageUtil.TryGetString(request, Protocal.solution);
+            SessionId = MessageUtil.TryGetString(request, Protocal.sessionid);
+            VerifyCode = MessageUtil.TryGetString(request, Protocal.verifycode);
+#if DEBUG
+            bool.TryParse(request["__showcode__"], out IsShowCode);
+#endif
         }
 
-        public override AccessGrant Token()
+        public override object Token()
         {
             ValidClient();
 
-            var result = OAuthService.ValidPassword(UserName, Password, PlatCode, Browser, IpAddress, ExtendField);
+            var result = OAuthService.ValidPassword(UserName, Password, IpAddressInt, ClientId, TerminalCode, Solution, SessionId, VerifyCode);
             if (result.Code != 0)
-                OAuthError(result.Code.ToString(), result.Message, result.Code);
+                return result;
 
-            return OAuthService.CreateAccessGrant(ClientId, ClientCode, result.UserId);
+            return OAuthService.CreateAccessGrant(ClientId, ClientCode, result.UserId, TerminalCode);
         }
     }
 }
