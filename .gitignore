@@ -1,7 +1,6 @@
 .meteor/local
 .meteor/meteorite
 *.pdb
-*.cache
 *.suo
 packages/
 Avalon.Access/bin/
