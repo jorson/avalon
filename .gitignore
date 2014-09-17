@@ -41,3 +41,12 @@ Avalon.UserCenter.Models/obj/
 Avalon.UserCenter/obj/
 Avalon.Repository.UserCenter/bin/
 Avalon.Repository.UserCenter/obj/
+Avalon.NewtonsoftJsonProvider/bin/
+Avalon.NewtonsoftJsonProvider/obj/Debug/Avalon.NewtonsoftJsonProvider.csproj.FileListAbsolute.txt
+Avalon.NewtonsoftJsonProvider/obj/
+Avalon.Test.Repository/bin/
+Avalon.Test.Repository/obj/
+Avalon.Test.Service/bin/
+Avalon.Test.Service/obj/
+Avalon.Web.Test/bin/
+Avalon.Web.Test/obj/
