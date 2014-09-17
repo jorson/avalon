@@ -125,8 +125,6 @@
   <ItemGroup>
     <Compile Include="Codes\AutofacServiceLocator.cs" />
     <Compile Include="Codes\AutofacServiceLocatorExtends.cs" />
-    <Compile Include="Controllers\ApiController.cs" />
-    <Compile Include="Controllers\CacheController.cs" />
     <Compile Include="Controllers\CURDController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,6 +176,10 @@
     <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
       <Project>{78fc7ba4-bcf2-4e90-a185-dec2fd16b2a7}</Project>
       <Name>Avalon.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.WebUtility\Avalon.WebUtility.csproj">
+      <Project>{b5f6acfe-d8b7-4324-b071-ade963feea4b}</Project>
+      <Name>Avalon.WebUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

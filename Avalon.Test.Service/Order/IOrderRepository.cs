@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Avalon.Test.Service
 {
-    public interface IUserRepository : INoShardRepository<User>
+    public interface IOrderRepository : INoShardRepository<Order>
     {
     }
 }

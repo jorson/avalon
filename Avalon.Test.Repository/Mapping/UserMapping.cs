@@ -36,8 +36,9 @@ namespace Avalon.Test.Repository
         {
             User ur = null;
             Order od = null;
+            //定义用户和订单之间的关联关系
             From<User>(() => ur)
-                .Join<Order>(()=>od, ()=>ur.UserId == od.UserId, JoinType.InnerJoin);
+                .Join<Order>(() => od, () => ur.UserId == od.UserId, JoinType.InnerJoin);
 
             Define<UserOrderQueryFilter>()
                 .Map(o => o.UserName, () => ur.UserName)

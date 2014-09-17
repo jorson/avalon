@@ -119,6 +119,4 @@ namespace Avalon.Framework.Querys
         }
 
     }
-
-
 }

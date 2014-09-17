@@ -15,7 +15,7 @@ namespace Avalon.WebUtility
 
         protected override ActionResult InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary<string, object> parameters)
         {
-            //open api counter 2013-10-12 hhb
+            //open api counter
             if (actionDescriptor.IsDefined(typeof(OpenApiAttribute), true) || actionDescriptor.ControllerDescriptor.IsDefined(typeof(OpenApiAttribute), true))
             {
                 if (StatService.CheckEnabled(StatOpenApi))
@@ -56,6 +56,16 @@ namespace Avalon.WebUtility
                     return new AjaxApiDataResult(actionReturnValue);
             }
             return base.CreateActionResult(controllerContext, actionDescriptor, actionReturnValue);
+        }
+
+        protected override object GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
+        {
+            var value = base.GetParameterValue(controllerContext, parameterDescriptor);
+            if (parameterDescriptor.ParameterType == typeof(string) && value != null && parameterDescriptor.GetCustomAttributes(typeof(NoTrimAttribute), false).Length == 0)
+            {
+                value = ((string)value).Trim();
+            }
+            return value;
         }
     }
 }

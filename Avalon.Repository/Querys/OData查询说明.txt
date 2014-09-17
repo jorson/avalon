@@ -1,0 +1,46 @@
+﻿1协议
+1.1URL参数
+$filter=filter_expression    //条件的表达式
+$top=int_value                //指定返回的数量
+$skip=int_value                //指定跳过的数量
+$orderby=orderby_expression    //排序的表达式
+$inlinecount=none|allpages    //是否返回总数
+$metadata=true|false        //返回接口的元数据
+注意：
+参数的顺序不限
+参数中的字段不区分大小写
+参数中的关键字都必须为小写
+1.1.1filter expression
+支持的操作符
+eq    等于        $filter=UnitId eq 100
+ne    不等于    $filter=UnitId ne 100
+gt    大于        $filter=UnitId gt 100
+ge    大于等于    $filter=UnitId ge 100
+lt    小于        $filter=UnitId lt 100
+le    小于等于    $filter=UnitId le 100
+and    逻辑与    $filter=UnitId eq 100 and UnitId eq 200
+or     逻辑或    $filter=UnitId eq 100 or UnitId eq 200
+支持的函数
+bool substringof(string p0, string p1)    模糊匹配    $filter=substringof(Title,'我的标题')
+bool startswith(string po, string p1)    以..开始    $filter=startswith(Title,'我的标题')
+bool endswith(string po, string p1        以..结束    $filter=endswith(Title,'我的标题')
+bool in(v0,v1,v2,...)                    在..里面（仅用于值类型）    $filter=UnitId in(100,200)
+bool notin(v0,v1,v2,...)                不在..里面（仅用于值类型）    $filter=UnitId notin(100,200)
+条件表达式支持括号 ()
+$filter=(UnitId eq 100 or substringof(Title,'我的标题') and UnitId eq 200`
+1.1.2orderby expression
+$orderby=UnitId asc,Id desc
+1.1.3inlinecount
+表示是否返回总数，如果值为 allpages, 返回 Paging 数据形态，否则返回 List 数据形态
+$inlinecount=allpages
+1.1.4metadata
+当指定元数据时，将忽略参数返回接口的元数据。元数据包含有可用于查询的字段及类型。
+$metadata=true
+1.2数据结构
+支持的数据包含有值类型、字符串、空值、日期、GUID
+$filter=Unit eq 100 and Title eq 'title' and Title ne null and UpDateTime gt '2013-12-1' and ResourceGuid eq '1FBC0871-D679-4CB0-BD34-00D866538A2C'
+1.3查询限制
+为了性能及安全性方面的考虑，某些接口会对请求的参数进行规则校验，如接口必须包含返回数量的限制、不能使用notin、不能使用like等等.
+
+
+http://dev.avalon.huayu.nd/curd/SearchUseOData?$filter=UserName%20eq%20%27Test%27%20and%20substringof(OrderNumber,%20%27Order%27)

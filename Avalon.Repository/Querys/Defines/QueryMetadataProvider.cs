@@ -38,13 +38,13 @@ namespace Avalon.Framework.Querys
         {
             if (specificationProvider == null)
             {
-                var assembly = Assembly.Load("Nd.Platform.NHibernateAccess");
+                var assembly = Assembly.Load("Avalon.Access");
                 if (assembly == null)
                     throw new ArgumentNullException("请先设置 RepositoryFramework.QuerySourceProvider 及　RepositoryFramework.QuerySpecificationProvider 值");
 
-                var specificationProviderType = assembly.GetType("Nd.Platform.NHibernateAccess.NHibernateQuerySpecificationProvider");
+                var specificationProviderType = assembly.GetType("Avalon.NHibernateAccess.NHibernateQuerySpecificationProvider");
                 specificationProvider = (IQuerySpecificationProvider)FastActivator.Create(specificationProviderType);
-                var sourceProviderType = assembly.GetType("Nd.Platform.NHibernateAccess.NHibernateQuerySourceProvider");
+                var sourceProviderType = assembly.GetType("Avalon.NHibernateAccess.NHibernateQuerySourceProvider");
                 sourceProvider = (IQuerySourceProvider)FastActivator.Create(sourceProviderType);
             }
         }

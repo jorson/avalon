@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalon.WebUtility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,6 +27,8 @@ namespace Avalon.Web.Test
 
             serviceLocator.Build();
             serviceLocator.BuilderMvc();
+
+            ControllerBuilder.Current.SetControllerFactory(new ApiControllerFactory());
         }
     }
 }

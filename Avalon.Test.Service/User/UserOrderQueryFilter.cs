@@ -7,7 +7,7 @@ namespace Avalon.Test.Service
 {
     public class UserOrderQueryFilter
     {
-        public string UserName;
-        public string OrderNumber;
+        public string UserName { get; set; }
+        public string OrderNumber { get; set; }
     }
 }

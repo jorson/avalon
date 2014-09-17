@@ -9,7 +9,12 @@ namespace Avalon.WebUtility
 {
     public class ApiControllerFactory : DefaultControllerFactory
     {
-        [System.Diagnostics.DebuggerHidden]
+        public ApiControllerFactory()
+        {
+            ModelBinders.Binders.DefaultBinder = new TrimModelBinder();
+        }
+
+        //[System.Diagnostics.DebuggerHidden]
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
             var iController = base.GetControllerInstance(requestContext, controllerType);

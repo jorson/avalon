@@ -1,4 +1,6 @@
-﻿using Avalon.Test.Service;
+﻿using Avalon.Framework.Querys;
+using Avalon.Test.Service;
+using Avalon.WebUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,13 @@ namespace Avalon.Web.Test.Controllers
 {
     public class CURDController : Controller
     {
-        private UserService userService;
+        private readonly UserService userService;
+        private readonly OrderService orderService;
 
-        public CURDController(UserService userService)
+        public CURDController(UserService userService, OrderService orderService)
         {
             this.userService = userService;
+            this.orderService = orderService;
         }
 
         public int CreateUser()
@@ -21,6 +25,12 @@ namespace Avalon.Web.Test.Controllers
             User user = new User("Test", EnumField.Field1, new List<int>() { 1, 2, 3, 4 });
             this.userService.CreateUser(user);
             return user.UserId;
+        }
+        public int CreateOrder()
+        {
+            Order order = new Order("Order_1", 1, DateTime.Now);
+            this.orderService.CreateOrder(order);
+            return order.OrderId;
         }
         public int UpdateUser()
         {
@@ -43,6 +53,23 @@ namespace Avalon.Web.Test.Controllers
         public bool GetUserList()
         {
             return false;
+        }
+        
+        [ODataQuery(typeof(UserOrderQueryFilter), typeof(User))]
+        public object SearchUseOData()
+        {
+            var data = ODataProcessor.Process<UserOrderQueryFilter, User>(
+                this.HttpContext, null,
+                null, null);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [OpenApi]
+        [CustomActionName("ajax")]
+        public object AjaxReturn()
+        {
+            User user = new User("Test", EnumField.Field1, new List<int>() { 1, 2, 3, 4 });
+            return user;
         }
     }
 }
