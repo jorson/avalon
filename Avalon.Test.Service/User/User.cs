@@ -21,10 +21,10 @@ namespace Avalon.Test.Service
         }
 
         public virtual int UserId { get; protected set; }
-        public virtual string UserName { get; protected set; }
-        public virtual EnumField EnumDemo { get; protected set; }
-        public virtual List<int> ListDemo { get; protected set; }
-        public virtual DateTime DateDemo { get; protected set; }
+        public virtual string UserName { get; set; }
+        public virtual EnumField EnumDemo { get; set; }
+        public virtual List<int> ListDemo { get; set; }
+        public virtual DateTime DateDemo { get; set; }
     }
 
     public enum EnumField

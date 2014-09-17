@@ -22,13 +22,23 @@ namespace Avalon.Web.Test.Controllers
             this.userService.CreateUser(user);
             return user.UserId;
         }
-        public bool UpdateUser()
+        public int UpdateUser()
         {
-            return false;
+            var user = this.userService.GetUser(1);
+            if (user != null)
+            {
+                user.UserName = "TestChange";
+                user.DateDemo = DateTime.Now;
+                this.userService.UpdateUser(user);
+                return user.UserId;
+            }
+            return -1;
+
         }
-        public bool GetUser()
+        public string GetUser()
         {
-            return false;
+            var user = this.userService.GetUser(1);
+            return user.UserName;
         }
         public bool GetUserList()
         {
