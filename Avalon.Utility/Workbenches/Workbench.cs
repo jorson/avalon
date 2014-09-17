@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using System.Runtime.Remoting.Messaging;
 using System.Reflection;
+using System.Security.Permissions;
 
 namespace Avalon.Utility
 {

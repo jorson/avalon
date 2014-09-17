@@ -76,7 +76,7 @@ namespace Avalon.Utility
 
         public static Action<object, object> CreateFieldCloner(FieldInfo field)
         {
-            if (field.ReflectedType.IsValueType)
+            if (field.IsInitOnly || field.ReflectedType.IsValueType)
             {
                 return new Action<object, object>((source, target) =>
                 {
@@ -171,6 +171,7 @@ namespace Avalon.Utility
             generator.Emit(OpCodes.Ret);
 
             return (RefSetterDelegate)setter.CreateDelegate(typeof(RefSetterDelegate));
+            //return (RefSetterDelegate)Delegate.CreateDelegate(typeof(RefSetterDelegate), setter);
         }
     }
 }

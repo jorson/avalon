@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2D80CD45-97FE-41AA-B95E-250490E76DAE}</ProjectGuid>
+    <ProjectGuid>{279C8CA3-F514-4FD6-BB17-EA68AFF5D748}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Avalon.Framework</RootNamespace>
-    <AssemblyName>Avalon.Framework</AssemblyName>
+    <RootNamespace>Avalon.NewtonsoftJsonProvider</RootNamespace>
+    <AssemblyName>Avalon.NewtonsoftJsonProvider</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,29 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrap\Bootstrapper.cs" />
-    <Compile Include="Bootstrap\IBootstrapperTask.cs" />
-    <Compile Include="Commands\CommandBus.cs" />
-    <Compile Include="Commands\DefaultCommandBus.cs" />
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandBus.cs" />
-    <Compile Include="Commands\ICommandExecutor.cs" />
-    <Compile Include="Containers\Container.cs" />
-    <Compile Include="Containers\DefaultDependency.cs" />
-    <Compile Include="Containers\DependencyResolver.cs" />
-    <Compile Include="Containers\IDependencyContainer.cs" />
-    <Compile Include="Containers\IDependencyRegister.cs" />
-    <Compile Include="Containers\IDependencyResolver.cs" />
-    <Compile Include="Interceptor\IRepositoryFrameworkInterceptor.cs" />
+    <Compile Include="JsonConverterProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IFetchable.cs" />
-    <Compile Include="Repository\ILifecycle.cs" />
-    <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Repository\ISpecification.cs" />
-    <Compile Include="Repository\ISpecificationProvider.cs" />
-    <Compile Include="Repository\IValidatable.cs" />
-    <Compile Include="Repository\QueryOrder.cs" />
-    <Compile Include="Service\IService.cs" />
+    <Compile Include="PublicContractResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Avalon.Utility\Avalon.Utility.csproj">
@@ -69,7 +52,9 @@
       <Name>Avalon.Utility</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

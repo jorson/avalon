@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<avalon>
+  <!--获取服务器时间接口-->
+  <time url="http://cron.gwy.91up.com/cron/globalservertime" />
+  <!--JSON序列化器-->
+  <util jsonProvider="Avalon.NewtonsoftJsonProvider.JsonConverterProvider, Avalon.NewtonsoftJsonProvider" />
+  <!--仓储相关程序集设置-->
+  <repository>
+    <assembly name="Avalon.Test.Repository"/>
+  </repository>
+  <!--服务相关程序集设置-->
+  <service>
+    <assembly name="Avalon.Test.Service"/>
+  </service>
+  <!-- 分区设置 -->
+  <shard defaultSessionFactory="Avalon.NHibernateAccess.NHibernateShardSessionFactory, Avalon.Access"
+    defaultStrategy="Avalon.Framework.Shards.NoShardStrategy,Avalon.Repository"
+    defaultShard="avalon">
+    <shardIds>
+      <shardId id="avalon" connectionName="avalon"></shardId>
+    </shardIds>
+  </shard>
+</avalon>

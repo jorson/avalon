@@ -40,8 +40,8 @@ namespace Avalon.Utility
                 typeof(TimeSpan),
                 typeof(Guid)
             });
-        }
 
+        }
         public static object DeepClone(this object instance)
         {
             if (instance == null)
@@ -74,6 +74,7 @@ namespace Avalon.Utility
 
             if (instanceType.IsEnum || instanceType.IsPointer || instanceType == typeof(Pointer))
             {
+                //添加锁，修复并发的BUG HHB 2013-10-29
                 lock (syncRoot)
                 {
                     noCloneHash.Add(instanceType);
@@ -102,7 +103,8 @@ namespace Avalon.Utility
             {
                 var array = (Array)instance;
                 int length = array.Length;
-                Array copied = (Array)Activator.CreateInstance(instanceType, length);
+                //Array copied = (Array)Activator.CreateInstance(instanceType, length);
+                Array copied = (Array)FastActivator.CreateArray(instanceType.GetElementType(), length);
                 visited.Add(instance, copied);
                 for (int i = 0; i < length; ++i)
                 {
@@ -123,7 +125,7 @@ namespace Avalon.Utility
         {
             Type type = instance.GetType();
 
-            while (type != null)
+            while (type != null && type != typeof(object))
             {
                 var ta = TypeAccessor.GetAccessor(type);
                 ta.CloneByFields(instance, clone, (v) => Clone(v, visited));

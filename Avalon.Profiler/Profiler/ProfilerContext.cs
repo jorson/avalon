@@ -35,7 +35,9 @@ namespace Avalon.Profiler
             data = new ProfilerData();
 
             var context = HttpContext.Current;
+            
             if (context.IsAvailable())
+            //if (context != null)
             {
                 data.Url = context.Request.Url.PathAndQuery;
             }
