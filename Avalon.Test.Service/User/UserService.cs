@@ -31,9 +31,11 @@ namespace Avalon.Test.Service
         {
             return this.userRepository.Get(id);
         }
-        public virtual void GetUserList()
+        public virtual IList<User> GetUserList(User user)
         {
-
+            var spec = this.userRepository.CreateSpecification()
+                .Where(o => o.UserName == user.UserName);
+            return this.userRepository.FindAll(spec);
         }
         public virtual void GetUserAll()
         {

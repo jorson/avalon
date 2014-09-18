@@ -44,3 +44,5 @@ $filter=Unit eq 100 and Title eq 'title' and Title ne null and UpDateTime gt '20
 
 
 http://dev.avalon.huayu.nd/curd/SearchUseOData?$filter=UserName%20eq%20%27Test%27%20and%20substringof(OrderNumber,%20%27Order%27)
+
+http://dev.avalon.huayu.nd/curd/SearchUseOData?UserName=&OrderNumber=rg
