@@ -34,10 +34,17 @@ namespace Avalon.Test.Service
         }
         public virtual IList<User> GetUserList(UserFilter filter = null)
         {
-            var spec = this.userRepository.CreateSpecification();
+            var spec = this.userRepository.CreateSpecification().Where(o => o.UserId > 0);
             if (filter != null)
             {
-                spec = spec.Where(o => o.UserName.Contains(filter.UserName) && o.EnumDemo == filter.EnumField);
+                if (!String.IsNullOrEmpty(filter.UserName))
+                {
+                    spec = spec.And(o => o.UserName.Contains(filter.UserName));
+                }
+                if (filter.EnumValue != 0)
+                {
+                    spec = spec.And(o => o.EnumDemo == (EnumField)filter.EnumValue);
+                }
             }
             return this.userRepository.FindAll(spec);
         }

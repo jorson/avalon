@@ -62,7 +62,10 @@
                 enumValue: -1
             },
             editor: {
-
+                IsNew: true,
+                UserId: -1,
+                UserName: "",
+                EnumValue: -1
             },
             list: []
         },
@@ -83,11 +86,20 @@
         },
         showEditor: function (id) {
             var self = this;
-            store.get(id, function (data) {
-                if (data == null) {
-
-                }
-            });
+            if (id == 0) {
+                self.model.editor.IsNew(true);
+                self.model.editor.UserName("");
+                self.model.editor.UserId(-1);
+                self.model.editor.EnumValue(-1);
+            } else {
+                store.get(id, function (data) {
+                    if (data != null) {
+                        ko.mapping.fromJS(data, {}, self.model.editor);
+                        self.model.editor.IsNew(false);
+                    }
+                });
+            }
+            $("#myModal").modal("show");
         },
         deleteItem: function (id) {
             var self = this;
@@ -103,6 +115,26 @@
                     }
                 });
             }
+        },
+        save: function () {
+            var data = ko.mapping.toJS(this.model.editor);
+            delete data.IsNew;
+            var self = this;
+
+            if (data.UserId == -1) {
+                store.create(data, function (result) {
+                    if (result != null) {
+                        self.list();
+                    }
+                });
+            } else {
+                store.update(data, function (result) {
+                    if (result != null) {
+                        self.list();
+                    }
+                });
+            }
+            $("#myModal").modal("hide");
         }
     };
 

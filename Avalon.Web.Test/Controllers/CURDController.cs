@@ -29,25 +29,18 @@ namespace Avalon.Web.Test.Controllers
             return View();
         }
         /// <summary>
-        /// 注册视图
-        /// </summary>
-        public ActionResult Register()
-        {
-            return View();
-        }
-        /// <summary>
         /// 创建用户信息
         /// </summary>
         [AjaxApi]
         [CustomActionName("create")]
-        public object CreateUser(string name)
+        public object CreateUser(string userName, int enumValue)
         {
-            if (String.IsNullOrEmpty(name))
+            if (String.IsNullOrEmpty(userName))
             {
                 throw new ArgumentNullException("name");
             }
 
-            User user = new User(name, EnumField.Field1, new List<int>() { 1, 2, 3, 4 });
+            User user = new User(userName, (EnumField)enumValue, new List<int>() { 1, 2, 3, 4 });
             this.userService.CreateUser(user);
             return new
             {
@@ -60,12 +53,13 @@ namespace Avalon.Web.Test.Controllers
         /// </summary>
         [AjaxApi]
         [CustomActionName("update")]
-        public object UpdateUser(int id, string userName)
+        public object UpdateUser(int userId, string userName, int enumValue)
         {
-            var user = this.userService.GetUser(id);
+            var user = this.userService.GetUser(userId);
             if (user != null)
             {
                 user.UserName = userName;
+                user.EnumDemo = (EnumField)enumValue;
                 user.DateDemo = DateTime.Now;
                 this.userService.UpdateUser(user);
             }
@@ -90,7 +84,7 @@ namespace Avalon.Web.Test.Controllers
         public object GetUser(int id)
         {
             var user = this.userService.GetUser(id);
-            return user == null ? null : new { UserId = user.UserId, UserName = user.UserName };
+            return user == null ? null : new { UserId = user.UserId, UserName = user.UserName, EnumValue = (int)user.EnumDemo };
         }
         /// <summary>
         /// 获取用户列表
@@ -108,11 +102,15 @@ namespace Avalon.Web.Test.Controllers
             }
             else
             {
-                UserFilter filter = new UserFilter()
+                UserFilter filter = new UserFilter();
+                if (!String.IsNullOrEmpty(userName))
                 {
-                    UserName = userName,
-                    EnumField = (EnumField)enumValue
-                };
+                    filter.UserName = userName;
+                }
+                if (enumValue != -1)
+                {
+                    filter.EnumValue = enumValue;
+                }
                 userList = this.userService.GetUserList(filter);
             }
             return userList.Select(o=>new

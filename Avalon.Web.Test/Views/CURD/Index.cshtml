@@ -16,13 +16,18 @@
     <div id="searcher">
         <form class="well form-search">
             <label class="control-label">
-                用户名: <input type="text" class="input-medium" />
+                用户名: <input type="text" class="input-medium" data-bind="value:model.searcher.userName" />
             </label>
             <label class="control-label">
-                枚举对象: <select class="input-medium"></select>
+                枚举对象: 
+                <select class="input-medium" data-bind="value:model.searcher.enumValue">
+                    <option value="-1">请选择...</option>
+                    <option value="1">字段1</option>
+                    <option value="2">字段2</option>
+                </select>
             </label>
-            <button class="btn btn-primary">查询</button>
-            <button class="btn btn-info">添加</button>
+            <button class="btn btn-primary" type="button" data-bind="click: list">查询</button>
+            <button class="btn btn-info" type="button" data-bind="click: function(){showEditor(0)}">添加</button>
         </form>
     </div>
     <div id="data">
@@ -48,8 +53,8 @@
                     <td data-bind="text: UserName"></td>
                     <td data-bind="text: EnField"></td>
                     <td>
-                        <a class="btn btn-primary" href="javascript:void(0)" data-bind="click: function(){ $root.showEditor($data.UserId)}">修改</a>
-                        <a class="btn btn-danger" href="javascript:void(0)" data-bind="click: function(){ $root.deleteItem($data.UserId)}">删除</a>
+                        <a class="btn btn-primary" href="javascript:void(0)" data-bind="click: function(){ $root.showEditor($data.UserId);}">修改</a>
+                        <a class="btn btn-danger" href="javascript:void(0)" data-bind="click: function(){ $root.deleteItem($data.UserId);}">删除</a>
                     </td>
                 </tr>
             </tbody>
@@ -60,24 +65,36 @@
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">请输入购买数量</h3>
+        <h3 id="myModalLabel" data-bind="text: model.editor.IsNew() ? '添加用户' : '修改用户'"></h3>
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
+            <input type="hidden" name="UserId" data-bind="value: model.editor.UserId" />
             <div class="control-group">
-                <label class="control-label" for="RealName">购买数量</label>
+                <label class="control-label" for="UserName">用户名</label>
                 <div class="control">
                     <div class="input-append">
-                        <input type="text" id="RealName" name="RealName" placeholder="请填写购买数量" />
-                        <span class="add-on">件</span>
+                        <input type="text" id="UserName" name="UserName" data-bind="value: model.editor.UserName" />
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="EnumValue">枚举对象</label>
+                <div class="control">
+                    <div class="input-append">
+                        <select id="EnumValue" name="EnumValue" data-bind="value: model.editor.EnumValue">
+                            <option value="-1">请选择...</option>
+                            <option value="1">字段1</option>
+                            <option value="2">字段2</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary">确认购买</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-bind="click: save">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
     </div>
 </div>
 

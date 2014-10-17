@@ -17,6 +17,6 @@ namespace Avalon.Test.Service.Filters
         /// <summary>
         /// 枚举筛选条件
         /// </summary>
-        public EnumField EnumField { get; set; }
+        public int EnumValue { get; set; }
     }
 }
