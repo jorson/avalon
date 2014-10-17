@@ -1,5 +1,6 @@
 ﻿using Avalon.Framework.Querys;
 using Avalon.Test.Service;
+using Avalon.Test.Service.Filters;
 using Avalon.WebUtility;
 using System;
 using System.Collections.Generic;
@@ -20,39 +21,106 @@ namespace Avalon.Web.Test.Controllers
             this.orderService = orderService;
         }
 
-        public int CreateUser()
+        /// <summary>
+        /// Index视图
+        /// </summary>
+        public ActionResult Index()
         {
-            User user = new User("Test", EnumField.Field1, new List<int>() { 1, 2, 3, 4 });
+            return View();
+        }
+        /// <summary>
+        /// 注册视图
+        /// </summary>
+        public ActionResult Register()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 创建用户信息
+        /// </summary>
+        [AjaxApi]
+        [CustomActionName("create")]
+        public object CreateUser(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            User user = new User(name, EnumField.Field1, new List<int>() { 1, 2, 3, 4 });
             this.userService.CreateUser(user);
-            return user.UserId;
+            return new
+            {
+                UserId = user.UserId,
+                UserName = user.UserName
+            };
         }
-        public int CreateOrder()
+        /// <summary>
+        /// 更新用户信息
+        /// </summary>
+        [AjaxApi]
+        [CustomActionName("update")]
+        public object UpdateUser(int id, string userName)
         {
-            Order order = new Order("Order_1", 1, DateTime.Now);
-            this.orderService.CreateOrder(order);
-            return order.OrderId;
-        }
-        public int UpdateUser()
-        {
-            var user = this.userService.GetUser(1);
+            var user = this.userService.GetUser(id);
             if (user != null)
             {
-                user.UserName = "TestChange";
+                user.UserName = userName;
                 user.DateDemo = DateTime.Now;
                 this.userService.UpdateUser(user);
-                return user.UserId;
             }
-            return -1;
+            return user;
 
         }
-        public string GetUser()
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        [AjaxApi]
+        [CustomActionName("delete")]
+        public void DeleteUser(int id)
         {
-            var user = this.userService.GetUser(1);
-            return user.UserName;
+            this.userService.DeleteUser(new User(id));
         }
-        public bool GetUserList()
+        /// <summary>
+        /// 获取单个用户的信息
+        /// </summary>
+        /// <returns>单用户信息</returns>
+        [AjaxApi]
+        [CustomActionName("get")]
+        public object GetUser(int id)
         {
-            return false;
+            var user = this.userService.GetUser(id);
+            return user == null ? null : new { UserId = user.UserId, UserName = user.UserName };
+        }
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <returns>用户列表</returns>
+        [AjaxApi]
+        [CustomActionName("list")]
+        public object GetUserList(string userName = "", int enumValue = -1)
+        {
+            IList<User> userList = new List<User>();
+
+            if(String.IsNullOrEmpty(userName) && enumValue == -1)
+            {
+                userList = this.userService.GetUserList();
+            }
+            else
+            {
+                UserFilter filter = new UserFilter()
+                {
+                    UserName = userName,
+                    EnumField = (EnumField)enumValue
+                };
+                userList = this.userService.GetUserList(filter);
+            }
+            return userList.Select(o=>new
+            {
+                UserId = o.UserId,
+                UserName = o.UserName,
+                EnField = o.EnumDemo.ToString()
+            });
         }
         
         [ODataQuery(typeof(UserOrderQueryFilter), typeof(User))]

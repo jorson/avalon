@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Foot{
+    @RenderSection("Foot", false)
+}
+@section Head{
+    @RenderSection("Head", false)
+}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+        @RenderSection("Nav", false)
+        </div>
+        <div class="span10">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+

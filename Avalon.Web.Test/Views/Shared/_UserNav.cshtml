@@ -1,0 +1,28 @@
+﻿@{
+    //这个对象两个分量, 第一个分量表示菜单, 第二个分量表示角色
+    var model = (Tuple<string, string>)Model;
+}
+
+<div class="well" style="max-width: 340px; padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">个人信息</li>
+        <!-- 公共的菜单, 不做角色判断 -->
+        <li class="@(model.Item1 != "Info" ? "" : "active")"><a href="Info">我的资料</a></li>
+        <li class="@(model.Item1 != "Password" ? "" : "active")"><a href="Password">密码管理</a></li>
+        <li class="divider"></li>
+        <li class="nav-header">订单信息</li>
+        <!-- 有角色区分的菜单, 需要做角色判断 -->
+        @if(model.Item2 == "admin")
+        {
+            //如果是Admin
+            <li class="@(model.Item1 != "NoPay" ? "" : "active")"><a href="NoPay">管理员未付款订单</a></li>
+            <li class="@(model.Item1 != "History" ? "" : "active")"><a href="History">历史订单</a></li>
+        }
+        else if (model.Item2 == "user")
+        {
+            //如果是User
+            <li class="@(model.Item1 != "UserNoPay" ? "" : "active")"><a href="UserNoPay">用户未付款订单</a></li>
+            <li class="@(model.Item1 != "UserHistory" ? "" : "active")"><a href="History">历史订单</a></li>
+        }
+    </ul>
+</div>

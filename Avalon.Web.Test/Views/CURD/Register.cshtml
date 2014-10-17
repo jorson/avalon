@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>操作提示</strong> 这个页面用于注册新用户
+</div>
+
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="RealName">电子邮件:</label>
+        <div class="control">
+            <input type="text" id="Email" name="Email" placeholder="请输入电子邮件" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="MobileNum">手机号码:</label>
+        <div class="control">
+            <input type="text" id="MobileNum" name="MobileNum" placeholder="请输入手机号码" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="Gender">性别:</label>
+        <div class="control">
+            <select id="Gender" name="Gender">
+                <option value="1">保密</option>
+                <option value="2">汉子</option>
+                <option value="3">女汉子</option>
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="control" style="padding-left:160px;">
+            <button type="button" class="btn btn-success">保存</button>
+        </div>
+    </div>
+</form>

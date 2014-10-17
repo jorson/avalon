@@ -136,6 +136,46 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="App_Data\avalon.xml" />
+    <Content Include="Content\bootstrap\v2.2.2\css\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap\v2.2.2\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap\v2.2.2\css\bootstrap.css" />
+    <Content Include="Content\bootstrap\v2.2.2\css\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\v2.2.2\css\datepicker.css" />
+    <Content Include="Content\bootstrap\v2.2.2\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\bootstrap\v2.2.2\img\glyphicons-halflings.png" />
+    <Content Include="Content\bootstrap\v2.2.2\js\bootstrap-datepicker.js" />
+    <Content Include="Content\bootstrap\v2.2.2\js\bootstrap.js" />
+    <Content Include="Content\bootstrap\v2.2.2\js\bootstrap.min.js" />
+    <Content Include="Content\curd_index.js" />
+    <Content Include="Content\jquery\jquery-1.7.1.js" />
+    <Content Include="Content\jquery\jquery-1.7.1.min.js" />
+    <Content Include="Content\jquery\jquery.validate-1.9.0.js" />
+    <Content Include="Content\jquery\jquery.validate.min-1.9.0.js" />
+    <Content Include="Content\jquery\pagination\demo.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo.css" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo_ajax.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo_events.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo_multi.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo_options.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\demo_singlePage.htm" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract1.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract2.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract3.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract4.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract5.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\images\abstract6.jpg" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\lib\jquery.min.js" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\members.js" />
+    <Content Include="Content\jquery\pagination\v2.2\demo\snippet.html" />
+    <Content Include="Content\jquery\pagination\v2.2\jquery.pagination.js" />
+    <Content Include="Content\jquery\pagination\v2.2\pagination.css" />
+    <Content Include="Content\jquery\tmpl\jquery.tmpl-1.0.0.js" />
+    <Content Include="Content\jquery\tmpl\jquery.tmpl.min-1.0.0.js" />
+    <Content Include="Content\ko\knockout-2.2.0-min.js" />
+    <Content Include="Content\ko\knockout-2.2.0.js" />
+    <Content Include="Content\ko\knockout.mapping-2.1.2.js" />
+    <Content Include="Content\ko\knockout.mapping-2.1.2.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -181,6 +221,18 @@
       <Project>{b5f6acfe-d8b7-4324-b071-ade963feea4b}</Project>
       <Name>Avalon.WebUtility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CURD\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_SimpleLayout.cshtml" />
+    <Content Include="Views\Shared\_UserLayout.cshtml" />
+    <Content Include="Views\Shared\_UserNav.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CURD\Register.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

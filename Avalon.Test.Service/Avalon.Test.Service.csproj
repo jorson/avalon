@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\UserFilter.cs" />
     <Compile Include="Order\IOrderRepository.cs" />
     <Compile Include="Order\Order.cs" />
     <Compile Include="Order\OrderService.cs" />

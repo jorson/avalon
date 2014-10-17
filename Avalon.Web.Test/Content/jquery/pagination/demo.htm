@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="lib/jquery_pagination/pagination.css" />
+    <script type="text/javascript" src="/jquery/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="lib/jquery_pagination/jquery.pagination.js">
+    </script>
+    <script type="text/javascript">
+
+        function pageselectCallback(page_id, jq) {
+            $('#Searchresult').text("Showing search results " + ((page_id * 10) + 1) + "-" + ((page_id * 10) + 10));
+        }
+
+        $(document).ready(function () {
+            // Create pagination element
+            $("#Pagination").pagination(300, {
+                num_edge_entries: 2,
+                num_display_entries: 8,
+                callback: pageselectCallback,
+                show_goto: true
+            });
+
+            // Set handler for setting pagination options via form
+            $("#setoptions").click(function () {
+                var opt = { callback: pageselectCallback };
+                // Collect options from the text fields - the fields are named like their option counterparts
+                $("input[@type=text]").each(function () {
+                    opt[this.name] = this.className.match(/numeric/) ? parseInt(this.value) : this.value;
+                });
+                // extract maxitems
+                var maxitems = opt.maxitems;
+                delete opt.maxitems;
+                // Avoid html injections in this demo
+                var htmlspecialchars = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }
+                $.each(htmlspecialchars, function (k, v) {
+                    opt.prev_text = opt.prev_text.replace(k, v);
+                    opt.next_text = opt.next_text.replace(k, v);
+                })
+                $("#Pagination").pagination(maxitems, opt);
+            });
+
+        });
+            
+    </script>
+    <style type="text/css">
+         <!--
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            background-color: #fff;
+            margin: 20px;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+		
+		h1 {
+			margin-bottom:10px;
+			font-size:1.5em;
+		}
+        
+		#Searchresult {
+			margin-top:15px;
+			margin-bottom:15px;
+			border:solid 1px #eef;
+			padding:5px;
+			background:#eef;
+		}
+		
+		#footer {
+			margin-top:20px;
+			font-size:60%;
+			color:#15B;
+		}
+		
+		label {
+			float:left;
+			width:250px;
+			display:block;
+		}
+		
+		form p {
+			clear:both;
+		}
+		
+        -->
+        </style>
+    <title>Pagination</title>
+</head>
+<body>
+    <h1>
+        jQuery Pagination Plugin Demo</h1>
+    <div id="Pagination" class="pagination">
+    </div>
+    <br style="clear: both;" />
+    <div id="Searchresult">
+        Showing search results 1-10 ...
+    </div>
+    <form name="paginationoptions">
+    <p>
+        <label for="maxitems">
+            总共:</label><input type="text" value="300" name="maxitems" id="maxitems" class="numeric" /></p>
+    <p>
+        <label for="items_per_page">
+            每页显示多少条:</label><input type="text" value="10" name="items_per_page" id="items_per_page"
+                class="numeric" /></p>
+    <p>
+        <label for="num_display_entries">
+            前面显示 点的数量:</label><input type="text" value="8" name="num_display_entries" id="num_display_entries"
+                class="numeric" /></p>
+    <p>
+        <label for="num">
+            开始/结束 点的数量:</label><input type="text" value="2" name="num_edge_entries" id="num_edge_entries"
+                class="numeric" /></p>
+    <p>
+        <label for="prev_text">
+            修改 "Previous" 标签</label><input type="text" value="« Previous" name="prev_text" id="prev_text" /></p>
+    <p>
+        <label for="next_text">
+            修改 "Next" 标签</label><input type="text" value="Next »" name="next_text" id="next_text" /></p>
+    <input type="button" id="setoptions" value="设置" />
+    </form>
+    <div id="footer">
+        <h3>
+            <a href="http://www.cssrain.cn/">cssrain.cn</a> , code by <a href="http://www.d-scribe.de/">
+                describe europe Ltd.</a>.
+        </h3>
+    </div>
+</body>
+</html>

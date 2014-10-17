@@ -1,4 +1,5 @@
 ﻿using Avalon.Framework;
+using Avalon.Test.Service.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,15 +32,14 @@ namespace Avalon.Test.Service
         {
             return this.userRepository.Get(id);
         }
-        public virtual IList<User> GetUserList(User user)
+        public virtual IList<User> GetUserList(UserFilter filter = null)
         {
-            var spec = this.userRepository.CreateSpecification()
-                .Where(o => o.UserName == user.UserName);
+            var spec = this.userRepository.CreateSpecification();
+            if (filter != null)
+            {
+                spec = spec.Where(o => o.UserName.Contains(filter.UserName) && o.EnumDemo == filter.EnumField);
+            }
             return this.userRepository.FindAll(spec);
-        }
-        public virtual void GetUserAll()
-        {
-
         }
     }
 }

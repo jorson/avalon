@@ -20,6 +20,11 @@ namespace Avalon.Test.Service
             this.DateDemo = DateTime.Now;
         }
 
+        public User(int id)
+        {
+            this.UserId = id;
+        }
+
         public virtual int UserId { get; protected set; }
         public virtual string UserName { get; set; }
         public virtual EnumField EnumDemo { get; set; }
