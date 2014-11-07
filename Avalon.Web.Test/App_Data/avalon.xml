@@ -4,6 +4,17 @@
   <time url="http://cron.gwy.91up.com/cron/globalservertime" />
   <!--JSON序列化器-->
   <util jsonProvider="Avalon.NewtonsoftJsonProvider.JsonConverterProvider, Avalon.NewtonsoftJsonProvider" />
+  <!-- 缓存配置 -->
+  <cache type="Avalon.Utility.RedisHashCache, Avalon.Access" factoryType="Avalon.Utility.SpecifiableCacheFactory, Avalon.Cache">
+    <redisHashCache connectionName="redisconn" />
+    <redisCache connectionName="redisconn" />
+    <specifiableFactory>
+      <add key="cache:region" type="Avalon.Utility.RedisCache, Avalon.Access" />
+      <add key="@@*" type="Avalon.Utility.RedisCache, Avalon.Access" />
+    </specifiableFactory>
+  </cache>
+  <!-- Profilter配置 -->
+  <profiler serializer="Avalon.RedisProvider.RedisProfilerSerializer, Avalon.Access" connectionName="redisconn" />
   <!--仓储相关程序集设置-->
   <repository>
     <assembly name="Avalon.Test.Repository"/>

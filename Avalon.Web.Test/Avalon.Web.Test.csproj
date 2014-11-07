@@ -172,10 +172,14 @@
     <Content Include="Content\jquery\pagination\v2.2\pagination.css" />
     <Content Include="Content\jquery\tmpl\jquery.tmpl-1.0.0.js" />
     <Content Include="Content\jquery\tmpl\jquery.tmpl.min-1.0.0.js" />
+    <Content Include="Content\json2.js" />
     <Content Include="Content\ko\knockout-2.2.0-min.js" />
     <Content Include="Content\ko\knockout-2.2.0.js" />
     <Content Include="Content\ko\knockout.mapping-2.1.2.js" />
     <Content Include="Content\ko\knockout.mapping-2.1.2.min.js" />
+    <Content Include="Content\profilter\profilter.debug.js" />
+    <Content Include="Content\profilter\profilter.js" />
+    <Content Include="Content\profilter\profilter.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -200,6 +204,10 @@
     <ProjectReference Include="..\Avalon.Framework\Avalon.Framework.csproj">
       <Project>{2d80cd45-97fe-41aa-b95e-250490e76dae}</Project>
       <Name>Avalon.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Avalon.Profiler\Avalon.Profiler.csproj">
+      <Project>{615883dd-8819-41ad-a4ef-42757beeddd2}</Project>
+      <Name>Avalon.Profiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Avalon.Repository\Avalon.Repository.csproj">
       <Project>{5e917d8e-f096-4e78-a836-830557586cd7}</Project>

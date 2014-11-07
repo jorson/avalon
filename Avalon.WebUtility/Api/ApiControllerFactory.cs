@@ -14,7 +14,7 @@ namespace Avalon.WebUtility
             ModelBinders.Binders.DefaultBinder = new TrimModelBinder();
         }
 
-        //[System.Diagnostics.DebuggerHidden]
+        [System.Diagnostics.DebuggerHidden]
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
             var iController = base.GetControllerInstance(requestContext, controllerType);
