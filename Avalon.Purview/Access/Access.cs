@@ -18,7 +18,6 @@ namespace Avalon.Purviews
 
         public Access()
         {
-           
         }
 
         /// <summary>

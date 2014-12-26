@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Avalon.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,6 @@ namespace Avalon.Web.Test
     {
         private ContainerBuilder builder = new ContainerBuilder();
         private IContainer container;
-
         public IContainer Container
         {
             get { return container; }

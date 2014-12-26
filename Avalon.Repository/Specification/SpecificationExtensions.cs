@@ -69,7 +69,7 @@ namespace Avalon.Framework
             if (expr == null)
                 throw new ArgumentNullException("expr");
 
-            // 多个where 使用 And 关系进行组合 HHB 2012-10-12
+            // 多个where 使用 And 关系进行组合
             if (spec.CriteriaExpression != null)
                 expr = spec.CriteriaExpression.And(expr);
 
