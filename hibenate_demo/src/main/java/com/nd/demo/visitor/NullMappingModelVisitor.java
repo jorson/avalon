@@ -1,0 +1,71 @@
+package com.nd.demo.visitor;
+
+import com.nd.demo.mapping.model.ClassMapping;
+import com.nd.demo.mapping.model.ColumnMapping;
+import com.nd.demo.mapping.model.HibernateMapping;
+import com.nd.demo.mapping.model.identity.GeneratorMapping;
+import com.nd.demo.mapping.model.identity.IdMapping;
+
+import java.util.Iterator;
+
+/**
+ * 在这里输入标题
+ * <p/>
+ * 说明
+ *
+ * @author jorson.WHY
+ * @package com.nd.demo.visitor
+ * @since 2015-03-23
+ */
+public abstract class NullMappingModelVisitor implements MappingModelVisitor {
+
+    @Override
+    public void processId(IdMapping idMapping) {
+
+    }
+
+    @Override
+    public void processClass(ClassMapping classMapping) {
+
+    }
+
+    @Override
+    public void processColumn(ColumnMapping columnMapping) {
+
+    }
+
+    @Override
+    public void processGenerator(GeneratorMapping generatorMapping) {
+
+    }
+
+    @Override
+    public void processHibernateMapping(HibernateMapping hibernateMapping) {
+
+    }
+
+    @Override
+    public void visit(IdMapping mapping) {
+
+    }
+
+    @Override
+    public void visit(ClassMapping classMapping) {
+
+    }
+
+    @Override
+    public void visit(ColumnMapping columnMapping) {
+
+    }
+
+    @Override
+    public void visit(GeneratorMapping generatorMapping) {
+
+    }
+
+    @Override
+    public void visit(Iterator<HibernateMapping> mappings) {
+
+    }
+}
