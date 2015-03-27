@@ -1,6 +1,6 @@
 package com.nd.demo.mapping.model.writer;
 
-import com.nd.demo.mapping.model.ClassMapping;
+import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.mapping.model.HibernateMapping;
 import com.nd.demo.mapping.model.writer.sorting.XmlNodeSorter;
 import com.nd.demo.visitor.NullMappingModelVisitor;

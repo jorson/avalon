@@ -1,7 +1,9 @@
 package com.nd.demo;
 
 import com.nd.demo.mapping.model.HibernateMapping;
+import com.nd.demo.mapping.model.writer.MappingXmlSerializer;
 import org.hibernate.cfg.Configuration;
+import org.w3c.dom.Document;
 
 import java.util.Iterator;
 
@@ -19,9 +21,16 @@ public class PersistenceModel {
         while (compiledMappings.hasNext()) {
             HibernateMapping mapping = compiledMappings.next();
             if(mapping.getClassMappings().size() > 0) {
-
+                MappingXmlSerializer serializer = new MappingXmlSerializer();
+                Document document = serializer.serialize(mapping);
+                cfg.addDocument(document);
             } else {
-                if(cfg.getClassMapping(mapping.getClassMappings().get(0).))
+                MappingXmlSerializer serializer = new MappingXmlSerializer();
+                Document document = serializer.serialize(mapping);
+
+                if(cfg.getClassMapping(mapping.getClassMappings().get(0).getEntityName()) == null) {
+                    cfg.addDocument(document);
+                }
             }
         }
     }

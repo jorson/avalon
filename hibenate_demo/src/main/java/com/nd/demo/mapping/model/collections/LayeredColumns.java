@@ -1,8 +1,9 @@
 package com.nd.demo.mapping.model.collections;
 
-import com.nd.demo.mapping.model.ColumnMapping;22
-
+import com.nd.demo.mapping.model.ColumnMapping;
 import java.util.*;
+
+import static com.nd.demo.mapping.model.EqualityExtensions.*;
 
 /**
  * 在这里输入标题
@@ -48,7 +49,7 @@ public class LayeredColumns {
         layeredValues.put(layer, new HashSet<ColumnMapping>());
     }
 
-    public boolean contentEquals(LayeredColumns columns) {
-        return layeredValues.con
+    public boolean makeSureContentEquals(LayeredColumns columns) {
+        return contentEquals(layeredValues, columns.layeredValues);
     }
 }

@@ -1,12 +1,10 @@
 package com.nd.demo.visitor;
 
-import com.nd.demo.mapping.model.ClassMapping;
-import com.nd.demo.mapping.model.ColumnMapping;
-import com.nd.demo.mapping.model.HibernateMapping;
+import com.nd.demo.mapping.model.*;
+import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.mapping.model.identity.IdMapping;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
@@ -19,6 +17,8 @@ public interface MappingModelVisitor {
     void processColumn(ColumnMapping columnMapping);
     void processGenerator(GeneratorMapping generatorMapping);
     void processHibernateMapping(HibernateMapping hibernateMapping);
+    void processProperty(PropertyMapping propertyMapping);
+    void processNaturalId(NaturalIdMapping naturalIdMapping);
 
     void visit(Iterator<HibernateMapping> mappings);
 
@@ -26,4 +26,6 @@ public interface MappingModelVisitor {
     void visit(ClassMapping classMapping);
     void visit(ColumnMapping columnMapping);
     void visit(GeneratorMapping generatorMapping);
+    void visit(PropertyMapping propertyMapping);
+    void visit(NaturalIdMapping naturalIdMapping);
 }

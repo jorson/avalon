@@ -1,6 +1,7 @@
 package com.nd.demo.mapping.model;
 
 import com.nd.demo.mapping.MappingBase;
+import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.visitor.MappingModelVisitor;
 
 import java.util.ArrayList;

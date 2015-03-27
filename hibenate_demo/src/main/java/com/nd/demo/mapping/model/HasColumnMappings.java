@@ -1,6 +1,6 @@
 package com.nd.demo.mapping.model;
 
-import java.util.Iterator;
+import java.util.Collection;
 
 /**
  * 在这里输入标题
@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public interface HasColumnMappings {
 
-    Iterator<ColumnMapping> getColumns();
+    Collection<ColumnMapping> getColumns();
     void addColumn(int layer, ColumnMapping column);
     void makeColumnsEmpty(int layer);
 }

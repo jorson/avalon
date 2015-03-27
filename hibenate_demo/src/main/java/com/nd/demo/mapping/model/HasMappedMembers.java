@@ -1,5 +1,7 @@
 package com.nd.demo.mapping.model;
 
+import java.util.Collection;
+
 /**
  * 在这里输入标题
  * <p/>
@@ -11,5 +13,7 @@ package com.nd.demo.mapping.model;
  */
 public interface HasMappedMembers {
 
-    Iterable
+    Collection<PropertyMapping> getProperties();
+
+    void addProperty(PropertyMapping property);
 }
