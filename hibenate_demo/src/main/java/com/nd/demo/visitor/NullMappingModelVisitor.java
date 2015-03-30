@@ -1,5 +1,6 @@
 package com.nd.demo.visitor;
 
+import com.nd.demo.mapping.model.NaturalIdMapping;
 import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.mapping.model.ColumnMapping;
 import com.nd.demo.mapping.model.HibernateMapping;
@@ -77,6 +78,16 @@ public abstract class NullMappingModelVisitor implements MappingModelVisitor {
 
     @Override
     public void visit(PropertyMapping propertyMapping) {
+
+    }
+
+    @Override
+    public void processNaturalId(NaturalIdMapping naturalIdMapping) {
+
+    }
+
+    @Override
+    public void visit(NaturalIdMapping naturalIdMapping) {
 
     }
 }
