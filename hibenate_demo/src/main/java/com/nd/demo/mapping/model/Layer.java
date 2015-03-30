@@ -13,5 +13,5 @@ public final class Layer {
 
     public static final int DEFAULTS = 0;
     public static final int CONVERTIONS = 1;
-    public static final int USERSUPPLIED = 2;
+    public static final int USER_SUPPLIED = 2;
 }

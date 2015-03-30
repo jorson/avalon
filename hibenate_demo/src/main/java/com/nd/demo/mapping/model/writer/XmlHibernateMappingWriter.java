@@ -60,11 +60,8 @@ public class XmlHibernateMappingWriter extends NullMappingModelVisitor
         if(hibernateMapping.isSpecified("Catalog")) {
             withAttr(element, "catalog", hibernateMapping.getCatalog());
         }
-        if(hibernateMapping.isSpecified("Namespace")) {
-            withAttr(element, "namespace", hibernateMapping.getNamespace());
-        }
         if(hibernateMapping.isSpecified("Assembly")) {
-            withAttr(element, "assembly", hibernateMapping.getAssembly());
+            withAttr(element, "package", hibernateMapping.getPackage());
         }
     }
 

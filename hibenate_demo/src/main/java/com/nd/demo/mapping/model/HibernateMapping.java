@@ -77,14 +77,9 @@ public class HibernateMapping extends MappingBase {
         return attributeStore.getOrDefault("DefaultLazy");
     }
 
-    public String getNamespace()
+    public String getPackage()
     {
-        return attributeStore.getOrDefault("Namespace");
-    }
-
-    public String getAssembly()
-    {
-        return attributeStore.getOrDefault("Assembly");
+        return attributeStore.getOrDefault("Package");
     }
 
 

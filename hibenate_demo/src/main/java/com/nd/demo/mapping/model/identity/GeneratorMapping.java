@@ -42,7 +42,7 @@ public class GeneratorMapping extends MappingBase {
     }
 
     public String getClassName() {
-        return null;
+        return attributes.getOrDefault("Class");
     }
 
     @Override
