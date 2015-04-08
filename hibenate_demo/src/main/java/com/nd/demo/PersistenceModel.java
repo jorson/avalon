@@ -2,10 +2,14 @@ package com.nd.demo;
 
 import com.nd.demo.mapping.model.HibernateMapping;
 import com.nd.demo.mapping.model.writer.MappingXmlSerializer;
+import com.nd.demo.mapping.provider.MappingProvider;
+import com.nd.demo.visitor.MappingModelVisitor;
 import org.hibernate.cfg.Configuration;
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -15,11 +19,19 @@ import java.util.Iterator;
  */
 public class PersistenceModel {
 
-    private Iterator<HibernateMapping> compiledMappings;
+    protected final List<MappingProvider> classProviders = new ArrayList<MappingProvider>();
+    private final List<MappingModelVisitor> visitors = new ArrayList<MappingModelVisitor>();
+    private List<HibernateMapping> compiledMappings;
+
+    public PersistenceModel() {
+
+    }
 
     public void configure(Configuration cfg) {
-        while (compiledMappings.hasNext()) {
-            HibernateMapping mapping = compiledMappings.next();
+
+        ensureMappingsBuilt();
+
+        for(HibernateMapping mapping : compiledMappings) {
             if(mapping.getClassMappings().size() > 0) {
                 MappingXmlSerializer serializer = new MappingXmlSerializer();
                 Document document = serializer.serialize(mapping);
@@ -33,5 +45,13 @@ public class PersistenceModel {
                 }
             }
         }
+    }
+
+    private void ensureMappingsBuilt() {
+
+    }
+
+    private void applyVisitors(List<HibernateMapping> mappings) {
+
     }
 }
