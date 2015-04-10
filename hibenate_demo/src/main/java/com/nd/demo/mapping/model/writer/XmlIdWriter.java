@@ -18,9 +18,9 @@ import static com.nd.demo.mapping.model.writer.XmlExtensions.*;
 public class XmlIdWriter extends NullMappingModelVisitor implements XmlWriter<IdMapping> {
 
     private Document document;
-    private final IXmlWriterServiceLocator serviceLocator;
+    private final XmlWriterServiceLocator serviceLocator;
 
-    public XmlIdWriter(IXmlWriterServiceLocator locator) {
+    public XmlIdWriter(XmlWriterServiceLocator locator) {
         this.serviceLocator = locator;
     }
 

@@ -8,7 +8,7 @@ import com.nd.demo.mapping.model.PropertyMapping;
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.mapping.model.identity.IdMapping;
 
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * 在这里输入标题
@@ -67,7 +67,7 @@ public abstract class NullMappingModelVisitor implements MappingModelVisitor {
     }
 
     @Override
-    public void visit(Iterator<HibernateMapping> mappings) {
+    public void visit(List<HibernateMapping> mappings) {
 
     }
 

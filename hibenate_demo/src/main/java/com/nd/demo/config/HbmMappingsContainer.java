@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class HbmMappingsContainer {
 
-    private final List<Class<? extends ClassMap>> classes = new ArrayList<Class<? extends ClassMap>>();
+    private final List<Class> classes = new ArrayList<Class>();
 
     private boolean wasUsed;
 
@@ -25,8 +25,8 @@ public class HbmMappingsContainer {
 
     }
 
-    public HbmMappingsContainer addClass(Class<? extends ClassMap>... clazzList) {
-        for(Class<? extends ClassMap> clz : clazzList) {
+    public HbmMappingsContainer addClass(Class... clazzList) {
+        for(Class clz : clazzList) {
             classes.add(clz);
         }
         this.wasUsed = (clazzList.length > 0);
@@ -34,7 +34,7 @@ public class HbmMappingsContainer {
     }
 
     void apply(Configuration cfg) {
-        for(Class<? extends ClassMap> clz : classes) {
+        for(Class clz : classes) {
             cfg.addClass(clz);
         }
     }

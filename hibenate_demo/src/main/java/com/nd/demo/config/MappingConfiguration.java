@@ -17,9 +17,13 @@ public class MappingConfiguration {
     private PersistenceModel model;
 
     private HbmMappingsContainer hbmMappingsContainer;
+    private FluentMappingsContainer fluentMappingsContainer;
 
     public MappingConfiguration() {
         hbmMappingsContainer = new HbmMappingsContainer();
+        fluentMappingsContainer = new FluentMappingsContainer();
+
+        usePersistenceModel(new PersistenceModel());
     }
 
     public MappingConfiguration usePersistenceModel(PersistenceModel model) {
@@ -31,12 +35,17 @@ public class MappingConfiguration {
         return hbmMappingsContainer;
     }
 
+    public FluentMappingsContainer getFluentMappingsContainer() {
+        return fluentMappingsContainer;
+    }
+
     public boolean isWasUse() {
         return hbmMappingsContainer.isWasUsed();
     }
 
     public void apply(Configuration cfg) {
         this.hbmMappingsContainer.apply(cfg);
+        this.fluentMappingsContainer.apply(model);
         model.configure(cfg);
     }
 }

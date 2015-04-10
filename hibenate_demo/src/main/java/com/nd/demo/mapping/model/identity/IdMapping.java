@@ -1,19 +1,27 @@
 package com.nd.demo.mapping.model.identity;
 
 import com.nd.demo.mapping.MappingBase;
+import com.nd.demo.mapping.model.AttributeStore;
+import com.nd.demo.mapping.model.ColumnBasedMappingBase;
 import com.nd.demo.mapping.model.TypeReference;
 import com.nd.demo.visitor.MappingModelVisitor;
 
 /**
- * 在这里输入标题
- * <p/>
- * 说明
  *
  * @author jorson.WHY
  * @package com.nd.demo.mapping.model
  * @since 2015-03-23
  */
-public class IdMapping extends MappingBase {
+public class IdMapping extends ColumnBasedMappingBase implements IdentityMapping {
+
+    public IdMapping() {
+        this(new AttributeStore());
+    }
+
+    public IdMapping(AttributeStore underlyingStore) {
+        super(underlyingStore);
+    }
+
     @Override
     public void acceptVisitor(MappingModelVisitor visitor) {
 
