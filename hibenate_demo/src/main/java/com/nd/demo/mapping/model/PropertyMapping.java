@@ -2,6 +2,8 @@ package com.nd.demo.mapping.model;
 
 import com.nd.demo.visitor.MappingModelVisitor;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 /**
@@ -16,6 +18,7 @@ import java.util.Collection;
 public class PropertyMapping extends ColumnBasedMappingBase {
 
     private Class containingEntityType;
+    private Field field;
 
     public PropertyMapping() {
         this(new AttributeStore());
@@ -87,5 +90,13 @@ public class PropertyMapping extends ColumnBasedMappingBase {
 
     public void setContainingEntityType(Class containingEntityType) {
         this.containingEntityType = containingEntityType;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
     }
 }

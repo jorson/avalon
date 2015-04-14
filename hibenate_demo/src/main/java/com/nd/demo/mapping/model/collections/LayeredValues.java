@@ -21,7 +21,7 @@ public class LayeredValues extends HashMap<Integer, Object> implements Serializa
         while (iterator.hasNext()) {
             tmpKey = iterator.next();
             if(tmpKey > maxKey) {
-                tmpKey = maxKey;
+                maxKey = tmpKey;
             }
         }
         return maxKey;

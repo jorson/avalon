@@ -58,9 +58,9 @@ public class ClassMap<T> extends ClassLikeMapBase<T> implements MappingProvider 
     public ClassMapping getClassMapping() {
         ClassMapping mapping = new ClassMapping(attributes.clone());
 
-        mapping.set(mapping.getClazz().getName(), Layer.DEFAULTS,
+        mapping.set(ConstElementKey.ELEMENT_TYPE, Layer.DEFAULTS,
                 GenericUtil.getFirstGenericParamClass(getClass()));
-        mapping.set(mapping.getName(), Layer.DEFAULTS,
+        mapping.set(ConstElementKey.ELEMENT_NAME, Layer.DEFAULTS,
                 GenericUtil.getFirstGenericParamClass(getClass()).getSimpleName());
 
         for(PropertyMappingProvider property : providers.getProperties()) {
@@ -68,12 +68,9 @@ public class ClassMap<T> extends ClassLikeMapBase<T> implements MappingProvider 
         }
 
         if(providers.getId() != null) {
-            mapping.set(mapping.getId().toString(), Layer.DEFAULTS,
-                    providers.getId().getIdentityMapping());
+            mapping.set(ConstElementKey.ELEMENT_ID, Layer.DEFAULTS, providers.getId().getIdentityMapping());
         }
-
-        mapping.set(mapping.getTableName(), Layer.DEFAULTS,
-                getDefaultTableName());
+        mapping.set(ConstElementKey.ELEMENT_TABLE_NAME, Layer.DEFAULTS, getDefaultTableName());
 
         return mapping;
     }

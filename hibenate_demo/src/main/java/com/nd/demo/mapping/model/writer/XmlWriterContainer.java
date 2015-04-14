@@ -25,6 +25,13 @@ public class XmlWriterContainer extends Container {
                 return null;
             }
         }, XmlHibernateMappingWriter.class);
+
+/*        registerWriter(new Instantiation() {
+            @Override
+            public Object registeredType(Container container) {
+                return null;
+            }
+        }, XmlClassWr);*/
     }
 
     private void registerWriter(Instantiation instantiation, Class<? extends XmlWriter> writerClazz) {

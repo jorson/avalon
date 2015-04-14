@@ -4,6 +4,7 @@ import com.nd.demo.mapping.model.*;
 import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.mapping.model.identity.IdMapping;
+import com.nd.demo.mapping.model.identity.IdentityMapping;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public interface MappingModelVisitor {
     void visit(List<HibernateMapping> mappings);
 
     void visit(IdMapping mapping);
+    void visit(IdentityMapping mapping);
     void visit(ClassMapping classMapping);
     void visit(ColumnMapping columnMapping);
     void visit(GeneratorMapping generatorMapping);

@@ -5,6 +5,7 @@ import com.nd.demo.mapping.model.writer.MappingXmlSerializer;
 import com.nd.demo.mapping.provider.MappingProvider;
 import com.nd.demo.visitor.MappingModelVisitor;
 import com.nd.demo.visitor.SeparateSubclassVisitor;
+import com.nd.demo.visitor.ValidationVisitor;
 import org.hibernate.cfg.Configuration;
 import org.w3c.dom.Document;
 
@@ -24,9 +25,11 @@ public class PersistenceModel {
     protected final List<MappingProvider> classProviders = new ArrayList<MappingProvider>();
     private final List<MappingModelVisitor> visitors = new ArrayList<MappingModelVisitor>();
     private List<HibernateMapping> compiledMappings;
+    private ValidationVisitor validationVisitor;
 
     public PersistenceModel() {
-        visitors.add(new SeparateSubclassVisitor());
+/*        visitors.add(new SeparateSubclassVisitor());
+        visitors.add(validationVisitor = new ValidationVisitor());*/
     }
 
     public void configure(Configuration cfg) {

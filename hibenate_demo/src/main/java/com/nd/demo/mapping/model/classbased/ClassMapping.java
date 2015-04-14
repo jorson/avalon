@@ -4,6 +4,7 @@ import com.nd.demo.mapping.model.AttributeStore;
 import com.nd.demo.mapping.model.NaturalIdMapping;
 import com.nd.demo.mapping.model.classbased.ClassMappingBase;
 import com.nd.demo.mapping.model.identity.IdentityMapping;
+import com.nd.demo.visitor.MappingModelVisitor;
 
 import java.io.Serializable;
 
@@ -18,6 +19,23 @@ public class ClassMapping extends ClassMappingBase {
     public ClassMapping(AttributeStore attributes) {
         super(attributes);
         this.attributeStore = attributes;
+    }
+
+    @Override
+    public void acceptVisitor(MappingModelVisitor visitor) {
+        visitor.processClass(this);
+
+        IdentityMapping identityMapping = this.getId();
+        if(identityMapping != null) {
+            visitor.visit(identityMapping);
+        }
+
+        NaturalIdMapping naturalIdMapping = this.getNaturalId();
+        if(naturalIdMapping != null) {
+            visitor.visit(naturalIdMapping);
+        }
+
+        super.acceptVisitor(visitor);
     }
 
     public IdentityMapping getId() {

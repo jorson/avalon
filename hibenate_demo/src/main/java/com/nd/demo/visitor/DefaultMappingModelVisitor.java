@@ -49,6 +49,11 @@ public abstract class DefaultMappingModelVisitor extends NullMappingModelVisitor
     }
 
     @Override
+    public void visit(IdentityMapping mapping) {
+        mapping.acceptVisitor(this);
+    }
+
+    @Override
     public void visit(ClassMapping classMapping) {
         classMapping.acceptVisitor(this);
     }
