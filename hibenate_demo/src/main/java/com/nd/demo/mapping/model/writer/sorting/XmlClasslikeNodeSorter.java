@@ -14,7 +14,7 @@ import java.util.Map;
  * @package com.nd.demo.mapping.model.writer.sorting
  * @since 2015-03-26
  */
-public class XmlClasslikeNodeSorter extends BaseXmlNodeSorter {
+public class XmlClassLikeNodeSorter extends BaseXmlNodeSorter {
     @Override
     protected Map<String, SortValue> getSorting() {
         return new HashMap<String, SortValue>()

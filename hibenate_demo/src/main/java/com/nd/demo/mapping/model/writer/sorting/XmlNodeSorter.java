@@ -14,6 +14,6 @@ import org.w3c.dom.Node;
 public class XmlNodeSorter {
 
     public static Node sortClassChildren(Node node) {
-        return new XmlClasslikeNodeSorter().sort(node);
+        return new XmlClassLikeNodeSorter().sort(node);
     }
 }
