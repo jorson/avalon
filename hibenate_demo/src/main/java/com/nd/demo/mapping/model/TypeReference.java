@@ -32,4 +32,13 @@ public class TypeReference {
     public String getInnerName() {
         return innerName;
     }
+
+    @Override
+    public String toString() {
+        if(innerClazz == null) {
+            return innerName;
+        } else {
+            return innerClazz.getName();
+        }
+    }
 }

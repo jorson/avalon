@@ -1,9 +1,8 @@
 package com.nd.demo.infrastructure;
 
+import com.nd.demo.mapping.model.writer.XmlWriter;
+
 /**
- * 在这里输入标题
- * <p/>
- * 说明
  *
  * @author jorson.WHY
  * @package com.nd.demo.infrastructure

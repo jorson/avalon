@@ -55,6 +55,6 @@ public class AttributeStore implements Serializable {
 
     public boolean isSpecified(String attribute) {
         LayeredValues values = layeredValues.getLayeredValues(attribute);
-        return values.isEmpty();
+        return !values.isEmpty();
     }
 }

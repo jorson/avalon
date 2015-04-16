@@ -1,7 +1,6 @@
 package com.nd.demo.mapping.model.writer;
 
-
-import org.w3c.dom.Document;
+import org.dom4j.Document;
 
 /**
  * 在这里输入标题

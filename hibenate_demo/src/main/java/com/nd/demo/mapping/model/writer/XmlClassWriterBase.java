@@ -2,7 +2,7 @@ package com.nd.demo.mapping.model.writer;
 
 import com.nd.demo.mapping.model.PropertyMapping;
 import com.nd.demo.visitor.NullMappingModelVisitor;
-import org.w3c.dom.Document;
+import org.dom4j.Document;
 
 /**
  * 在这里输入标题
@@ -24,7 +24,7 @@ public class XmlClassWriterBase extends NullMappingModelVisitor {
 
     @Override
     public void visit(PropertyMapping propertyMapping) {
-        XmlWriter<PropertyMapping> writer = serviceLocator.getWriter();
+        XmlWriter<PropertyMapping> writer = serviceLocator.getWriter(PropertyMapping.class);
         Document doc = writer.write(propertyMapping);
         XmlExtensions.importAndAppendChild(this.document, doc);
     }

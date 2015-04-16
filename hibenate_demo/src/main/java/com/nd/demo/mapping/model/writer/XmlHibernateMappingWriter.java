@@ -4,10 +4,12 @@ import com.nd.demo.mapping.model.classbased.ClassMapping;
 import com.nd.demo.mapping.model.HibernateMapping;
 import com.nd.demo.mapping.model.writer.sorting.XmlNodeSorter;
 import com.nd.demo.visitor.NullMappingModelVisitor;
-import org.dom4j.dom.DOMDocument;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.dom.DOMDocumentFactory;
+import org.dom4j.dom.DOMNodeHelper;
 
 import static com.nd.demo.mapping.model.writer.XmlExtensions.*;
 
@@ -37,11 +39,14 @@ public class XmlHibernateMappingWriter extends NullMappingModelVisitor
 
     @Override
     public void processHibernateMapping(HibernateMapping hibernateMapping) {
-        document = new DOMDocument();
-
-        Element element = document.createElement("hibernate-mapping");
+        //创建Document对象
+        document = DocumentHelper.createDocument();
+        //创建hbm的根节点
+        Element element = document.addElement("hibernate-mapping");
+        document.setRootElement(element);
+        //设置必要的属性
         withAttr(element, "xmlns", "urn:nhibernate-mapping-2.2");
-
+        //设置可选的属性
         if(hibernateMapping.isSpecified("DefaultAccess")) {
             withAttr(element, "default-access", hibernateMapping.getDefaultAccess());
         }
@@ -67,11 +72,10 @@ public class XmlHibernateMappingWriter extends NullMappingModelVisitor
 
     @Override
     public void visit(ClassMapping classMapping) {
-        XmlWriter<ClassMapping> writer = serviceLocator.getWriter();
+        //TODO: not sort
+        XmlWriter<ClassMapping> writer = serviceLocator.getWriter(ClassMapping.class);
         Document hbmClass = writer.write(classMapping);
-        Node newClassNode = document.importNode(hbmClass.getDocumentElement(), true);
-        XmlNodeSorter.sortClassChildren(newClassNode);
-
-        document.getDocumentElement().appendChild(newClassNode);
+        Element hbmElement = hbmClass.getRootElement();
+        document.getRootElement().add(hbmElement);
     }
 }

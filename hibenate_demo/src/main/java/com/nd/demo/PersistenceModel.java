@@ -6,9 +6,12 @@ import com.nd.demo.mapping.provider.MappingProvider;
 import com.nd.demo.visitor.MappingModelVisitor;
 import com.nd.demo.visitor.SeparateSubclassVisitor;
 import com.nd.demo.visitor.ValidationVisitor;
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
 import org.hibernate.cfg.Configuration;
-import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,13 +43,13 @@ public class PersistenceModel {
             if(mapping.getClassMappings().size() > 0) {
                 MappingXmlSerializer serializer = new MappingXmlSerializer();
                 Document document = serializer.serialize(mapping);
-                cfg.addDocument(document);
+                cfg.addDocument(convertDom4jToW3c(document));
             } else {
                 MappingXmlSerializer serializer = new MappingXmlSerializer();
                 Document document = serializer.serialize(mapping);
 
                 if(cfg.getClassMapping(mapping.getClassMappings().get(0).getEntityName()) == null) {
-                    cfg.addDocument(document);
+                    cfg.addDocument(convertDom4jToW3c(document));
                 }
             }
         }
@@ -114,6 +117,23 @@ public class PersistenceModel {
         } catch (Exception ex) {
             throw new MissingConstructorException(clazz);
         }
+    }
+
+    private org.w3c.dom.Document convertDom4jToW3c(org.dom4j.Document originalDocument) {
+        String xmlString = originalDocument.asXML();
+        org.w3c.dom.Document resultDocument = null;
+        try {
+            if(StringUtils.isNotEmpty(xmlString)) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                resultDocument = builder.parse(xmlString);
+            } else {
+                throw new NullPointerException("originalDocument is NULL");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return resultDocument;
     }
 
     public interface AddHibernateMapping {

@@ -1,7 +1,10 @@
 package com.nd.demo.infrastructure;
 
+import com.nd.demo.mapping.model.writer.XmlWriter;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author jorson.WHY
@@ -10,12 +13,12 @@ import java.util.Map;
  */
 public class Container {
 
-    private final Map<Class, Instantiation> registeredTypes =
-            new HashMap<Class, Instantiation>();
+    private final Map<Class, Object> registeredTypes =
+            new HashMap<Class, Object>();
 
-    public void register(Instantiation instantiationFunc, Class registerClazz) {
+    public void register(Object xmlWriter, Class registerClazz) {
         if(!registeredTypes.containsKey(registerClazz)) {
-            registeredTypes.put(registerClazz, instantiationFunc);
+            registeredTypes.put(registerClazz, xmlWriter);
         }
     }
 
@@ -23,7 +26,6 @@ public class Container {
         if(!registeredTypes.containsKey(clazz)) {
             throw new ResolveException(clazz);
         }
-        Instantiation instantiationFunc = registeredTypes.get(clazz);
-        return instantiationFunc.registeredType(this);
+        return registeredTypes.get(clazz);
     }
 }

@@ -1,9 +1,10 @@
 package com.nd.demo.mapping.model.writer;
 
 import com.nd.demo.mapping.model.TypeReference;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.dom.DOMAttribute;
 
 /**
  * 在这里输入标题
@@ -25,7 +26,7 @@ final class XmlExtensions {
     }
 
     public static final Element withAttr(Element element, String key, String attrValue) {
-        element.setAttribute(key, attrValue);
+        element.addAttribute(key, attrValue);
         return element;
     }
 
@@ -34,7 +35,7 @@ final class XmlExtensions {
     }
 
     public static final void importAndAppendChild(Document document, Document toImport) {
-        Node node = document.importNode(toImport.getDocumentElement(), true);
-        document.getDocumentElement().appendChild(node);
+        Element rootElement = toImport.getRootElement();
+        document.getRootElement().add(rootElement);
     }
 }

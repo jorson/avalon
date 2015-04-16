@@ -2,7 +2,7 @@ package com.nd.demo.mapping.model.writer;
 
 import com.nd.demo.infrastructure.ResolveException;
 import com.nd.demo.mapping.model.HibernateMapping;
-import org.w3c.dom.Document;
+import org.dom4j.Document;
 
 /**
  * @author jorson.WHY

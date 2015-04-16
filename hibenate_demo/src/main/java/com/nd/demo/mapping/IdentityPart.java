@@ -1,6 +1,9 @@
 package com.nd.demo.mapping;
 
 import com.nd.demo.mapping.model.AttributeStore;
+import com.nd.demo.mapping.model.ColumnMapping;
+import com.nd.demo.mapping.model.Layer;
+import com.nd.demo.mapping.model.TypeReference;
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.mapping.model.identity.IdMapping;
 import com.nd.demo.mapping.provider.IdentityMappingProvider;
@@ -22,16 +25,20 @@ import java.util.List;
 public class IdentityPart implements IdentityMappingProvider {
 
     private final AttributeStore columnAttributes = new AttributeStore();
+    private final AttributeStore attributes = new AttributeStore();
     private final List<String> columns = new ArrayList<String>();
 
     private final Class entityClazz;
     private Class identityType;
     private boolean nextBool = true;
     private String name;
+    private Field field;
 
 
     public IdentityPart(Class entity, Field field) {
         this.entityClazz = entity;
+        this.field = field;
+        this.identityType = field.getType();
 
         setName(field.getName());
         setDefaultGenerator();
@@ -39,7 +46,27 @@ public class IdentityPart implements IdentityMappingProvider {
 
     @Override
     public IdMapping getIdentityMapping() {
-        return null;
+        IdMapping mapping = new IdMapping(attributes.clone());
+        mapping.setContainingEntityType(entityClazz);
+
+        if(columns.size() > 0) {
+            for(String column : columns) {
+                ColumnMapping columnMapping = new ColumnMapping(columnAttributes.clone());
+                columnMapping.set(ConstElementKey.ELEMENT_NAME, Layer.DEFAULTS, column);
+                mapping.addColumn(Layer.USER_SUPPLIED, columnMapping);
+            }
+        } else if(hasNameSpecified()) {
+            ColumnMapping columnMapping = new ColumnMapping(columnAttributes.clone());
+            columnMapping.set(ConstElementKey.ELEMENT_NAME, Layer.DEFAULTS, name);
+            mapping.addColumn(Layer.DEFAULTS, columnMapping);
+        }
+
+        if(this.field != null) {
+            mapping.set(ConstElementKey.ELEMENT_NAME, Layer.DEFAULTS, name);
+        }
+        mapping.set(ConstElementKey.ELEMENT_TYPE, Layer.DEFAULTS, new TypeReference(identityType));
+
+        return mapping;
     }
 
     private void setDefaultGenerator() {

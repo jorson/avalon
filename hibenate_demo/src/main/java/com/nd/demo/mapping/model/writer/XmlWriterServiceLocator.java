@@ -11,5 +11,5 @@ package com.nd.demo.mapping.model.writer;
  */
 public interface XmlWriterServiceLocator {
 
-    <T> XmlWriter<T> getWriter();
+    <T> XmlWriter<T> getWriter(Class clazz);
 }

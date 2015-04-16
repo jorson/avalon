@@ -2,9 +2,10 @@ package com.nd.demo.mapping.model.writer;
 
 import com.nd.demo.mapping.model.ColumnMapping;
 import com.nd.demo.visitor.NullMappingModelVisitor;
-import org.dom4j.dom.DOMDocument;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import static com.nd.demo.mapping.model.writer.XmlExtensions.*;
 
 /**
@@ -29,9 +30,9 @@ public class XmlColumnWriter extends NullMappingModelVisitor implements XmlWrite
 
     @Override
     public void processColumn(ColumnMapping columnMapping) {
-        document = new DOMDocument();
+        document = DocumentHelper.createDocument();
+        Element element = document.addElement("column");
 
-        Element element = document.createElement("column");
         if(columnMapping.isSpecified("Name")) {
             withAttr(element, "name", columnMapping.getName());
         }
@@ -65,7 +66,5 @@ public class XmlColumnWriter extends NullMappingModelVisitor implements XmlWrite
 
         if (columnMapping.isSpecified("Default"))
             withAttr(element, "default", columnMapping.getDefault());
-
-        document.appendChild(element);
     }
 }

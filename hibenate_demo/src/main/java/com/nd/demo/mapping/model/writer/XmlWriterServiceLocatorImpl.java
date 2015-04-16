@@ -21,9 +21,9 @@ public class XmlWriterServiceLocatorImpl implements XmlWriterServiceLocator {
     }
 
     @Override
-    public <T> XmlWriter<T> getWriter() {
+    public <T> XmlWriter<T> getWriter(Class clazz) {
         try {
-            return (XmlWriter<T>)container.resolve(XmlWriter.class);
+            return (XmlWriter<T>)container.resolve(clazz);
         } catch (ResolveException e) {
             return null;
         }

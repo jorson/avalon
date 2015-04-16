@@ -4,9 +4,10 @@ import com.nd.demo.mapping.model.ColumnMapping;
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.mapping.model.identity.IdMapping;
 import com.nd.demo.visitor.NullMappingModelVisitor;
-import org.dom4j.dom.DOMDocument;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import static com.nd.demo.mapping.model.writer.XmlExtensions.*;
 
 /**
@@ -33,8 +34,8 @@ public class XmlIdWriter extends NullMappingModelVisitor implements XmlWriter<Id
 
     @Override
     public void processId(IdMapping mapping) {
-        document = new DOMDocument();
-        Element element = document.createElement("id");
+        document = DocumentHelper.createDocument();
+        Element element = document.addElement("id");
 
         if(mapping.isSpecified("Access")) {
             withAttr(element, "access", mapping.getAccess());
@@ -52,14 +53,14 @@ public class XmlIdWriter extends NullMappingModelVisitor implements XmlWriter<Id
 
     @Override
     public void visit(ColumnMapping columnMapping) {
-        XmlWriter<ColumnMapping> writer = this.serviceLocator.getWriter();
+        XmlWriter<ColumnMapping> writer = this.serviceLocator.getWriter(ColumnMapping.class);
         Document columnXml = writer.write(columnMapping);
         importAndAppendChild(this.document, columnXml);
     }
 
     @Override
     public void visit(GeneratorMapping generatorMapping) {
-        XmlWriter<GeneratorMapping> writer = this.serviceLocator.getWriter();
+        XmlWriter<GeneratorMapping> writer = this.serviceLocator.getWriter(GeneratorMapping.class);
         Document generatorXml = writer.write(generatorMapping);
         importAndAppendChild(this.document, generatorXml);
     }

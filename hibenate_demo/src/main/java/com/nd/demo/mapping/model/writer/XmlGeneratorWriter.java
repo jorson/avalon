@@ -2,9 +2,12 @@ package com.nd.demo.mapping.model.writer;
 
 import com.nd.demo.mapping.model.identity.GeneratorMapping;
 import com.nd.demo.visitor.NullMappingModelVisitor;
-import org.dom4j.dom.DOMDocument;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import java.util.Map;
+
 import static com.nd.demo.mapping.model.writer.XmlExtensions.*;
 
 /**
@@ -27,14 +30,17 @@ public class XmlGeneratorWriter extends NullMappingModelVisitor implements XmlWr
 
     @Override
     public void processGenerator(GeneratorMapping generatorMapping) {
-        document = new DOMDocument();
-
-        Element element = document.createElement("generator");
+        document = DocumentHelper.createDocument();
+        Element element = document.addElement("generator");
 
         if(generatorMapping.isSpecified("Class")) {
             withAttr(element, "class", generatorMapping.getClassName());
         }
 
-        
+        for(Map.Entry<String, String> param : generatorMapping.getParams().entrySet()) {
+            element.addElement("param")
+                    .addAttribute("name", param.getKey())
+                    .addText(param.getValue());
+        }
     }
 }

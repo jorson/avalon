@@ -3,6 +3,7 @@ package com.nd.demo.mapping.model.identity;
 import com.nd.demo.mapping.MappingBase;
 import com.nd.demo.mapping.model.AttributeStore;
 import com.nd.demo.mapping.model.ColumnBasedMappingBase;
+import com.nd.demo.mapping.model.ColumnMapping;
 import com.nd.demo.mapping.model.TypeReference;
 import com.nd.demo.visitor.MappingModelVisitor;
 
@@ -14,6 +15,8 @@ import com.nd.demo.visitor.MappingModelVisitor;
  */
 public class IdMapping extends ColumnBasedMappingBase implements IdentityMapping {
 
+    private Class containingEntityType;
+
     public IdMapping() {
         this(new AttributeStore());
     }
@@ -24,7 +27,11 @@ public class IdMapping extends ColumnBasedMappingBase implements IdentityMapping
 
     @Override
     public void acceptVisitor(MappingModelVisitor visitor) {
+        visitor.processId(this);
 
+        for(ColumnMapping mapping : getColumns()) {
+            visitor.visit(mapping);
+        }
     }
 
     @Override
@@ -51,5 +58,13 @@ public class IdMapping extends ColumnBasedMappingBase implements IdentityMapping
 
     public String getUnsavedValue() {
         return null;
+    }
+
+    public Class getContainingEntityType() {
+        return containingEntityType;
+    }
+
+    public void setContainingEntityType(Class containingEntityType) {
+        this.containingEntityType = containingEntityType;
     }
 }
